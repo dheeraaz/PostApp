@@ -1,0 +1,11 @@
+#Frontend
+Frontend/node_modules
+Frontend/dist
+Frontend/dist-ssr
+Frontend/*.local
+
+#Backend
+Backend/node_modules
+Backend/.env
+Backend/.env.test
+Backend/.env.production
