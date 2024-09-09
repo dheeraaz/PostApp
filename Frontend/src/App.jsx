@@ -8,7 +8,7 @@ const myRouter = createBrowserRouter(
 )
 
 const App = () => {
-  return <div className='_app_container'>
+  return <div className='_app-container'>
     <RouterProvider router={myRouter} />
   </div>
 }

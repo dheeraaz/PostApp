@@ -12,12 +12,10 @@ const Authentication = () => {
     setToggle(id);
   }
   return (
-    <div className="w-fit mx-auto min-h-screen flex items-center">
-      <div className="bg-[#111727]">
-        {toggle === 1 && <Login updateToggle={updateToggle} />}
-        {toggle === 2 && <Registration updateToggle={updateToggle} />}
-        {toggle === 3 && <ForgotPassword updateToggle={updateToggle} />}
-      </div>
+    <div className="w-full min-h-screen flex items-center justify-center">
+      {toggle === 1 && <Login updateToggle={updateToggle} />}
+      {toggle === 2 && <Registration updateToggle={updateToggle} />}
+      {toggle === 3 && <ForgotPassword updateToggle={updateToggle} />}
     </div>
   )
 }
