@@ -1,9 +1,10 @@
 import { MdOutlineMail } from "react-icons/md";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useForm } from 'react-hook-form';
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = ({ updateToggle }) => {
-
+    const navigate = useNavigate();
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
@@ -27,7 +28,7 @@ const ForgotPassword = ({ updateToggle }) => {
     return (
         <div className="bg-_primary rounded-md pt-8 mx-auto w-[90%] max-w-[400px]">
             <div className="px-4">
-                <div className="text-3xl font-semibold text-center bg-gradient-to-br from-blue-400 to-purple-600  text-transparent bg-clip-text">Forgot Password</div>
+                <div className="text-3xl font-semibold text-center bg-gradient-to-r from-blue-400 to-purple-600  text-transparent bg-clip-text">Forgot Password</div>
                 <p className="text-center font-extralight my-4">Enter your email address and we'll send an email to reset your password</p>
 
                 <form action="" onSubmit={handleSubmit(dataSubmit)} className="flex flex-col gap-4">
@@ -42,9 +43,8 @@ const ForgotPassword = ({ updateToggle }) => {
             </div>
             <div className="bg-gray-800 rounded-b-md mt-8 flex items-center justify-center gap-2 p-4 font-light">
                 <IoIosArrowRoundBack size={25} />
-                <button onClick={() => { updateToggle(1) }} className=' hover:cursor-pointer text-blue-600 hover:underline font-normal'>Back To Login</button>
+                <button onClick={() => navigate('/')} className=' hover:cursor-pointer text-blue-600 hover:underline font-normal'>Back To Login</button>
             </div>
-
         </div>
     )
 }
