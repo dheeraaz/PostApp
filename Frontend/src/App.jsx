@@ -1,13 +1,16 @@
-import React from 'react'
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
+import { Authentication } from './Pages/index.js'
+
+const myRouter = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<Authentication />} />
+  )
+)
 
 const App = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
-    </div>
-  )
+  return <div className='_app_container'>
+    <RouterProvider router={myRouter} />
+  </div>
 }
 
 export default App

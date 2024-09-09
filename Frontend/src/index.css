@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  @apply bg-[#040512] text-white;
+}
+#root::before {
+  @apply content-[''] w-96 h-96 bg-blue-600 fixed rounded-full blur-[200px] -top-12 -left-12;
+}
+#root::after {
+  @apply content-[''] w-96 h-96 bg-purple-600 fixed rounded-full blur-[200px] -bottom-12 -right-12;
+}
+._app_container {
+  @apply w-full min-h-screen backdrop-filter backdrop-blur-md bg-opacity-15;
+}
+
+/* this one overrides the tailwind classes */
+/* @layer utilities{
+
+} */
