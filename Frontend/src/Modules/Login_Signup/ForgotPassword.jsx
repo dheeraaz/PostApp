@@ -3,7 +3,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 
-const ForgotPassword = ({ updateToggle }) => {
+const ForgotPassword = () => {
     const navigate = useNavigate();
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({

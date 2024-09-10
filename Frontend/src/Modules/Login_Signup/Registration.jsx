@@ -1,22 +1,19 @@
-import React, { useState } from "react"
+import React from "react"
 import { MdOutlineMail } from "react-icons/md";
 import { FiLock, FiUser } from "react-icons/fi";
-import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 
-const Registration = ({ updateToggle }) => {
+const Registration = () => {
   const navigate = useNavigate();
-
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false)
 
   const { register, watch, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
       username: "",
       age: "",
       email: "",
-      password: ""
+      password: "",
+      confirm_password:"",
     }
   })
 
@@ -58,10 +55,7 @@ const Registration = ({ updateToggle }) => {
             <div>
               <div className="flex items-center gap-2 bg-gray-600 w-full p-2 rounded-md group border-[1px] border-transparent focus-within:border-blue-500">
                 <FiLock size={20} />
-                <input type={`${isPasswordVisible ? 'text' : 'password'}`} {...register('password', { required: "Password Is Required", minLength: { value: 8, message: "The password length must be atleast 8" } })} className=" flex-1 bg-transparent outline-none " placeholder="Enter Your Password" autoComplete="off" />
-                <button onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
-                  {isPasswordVisible ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-                </button>
+                <input type='password' {...register('password', { required: "Password Is Required", minLength: { value: 8, message: "The password length must be atleast 8" } })} className=" flex-1 bg-transparent outline-none " placeholder="Enter Your Password" autoComplete="off" />
               </div>
               {errors?.password && <p className='text-orange-300 text-sm'>{errors?.password?.message}</p>}
             </div>
@@ -69,10 +63,7 @@ const Registration = ({ updateToggle }) => {
             <div>
               <div className="flex items-center gap-2 bg-gray-600 w-full p-2 rounded-md group border-[1px] border-transparent focus-within:border-blue-500">
                 <FiLock size={20} />
-                <input type={`${isConfirmPasswordVisible ? 'text' : 'password'}`} {...register('confirm_password', { required: "Confirm Password Is Required", validate: (val) => { if (watch('password') !== val) return "Your Password Donot Match" } })} className=" flex-1 bg-transparent outline-none " placeholder="Confirm Your Password" autoComplete="off" />
-                <button onClick={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}>
-                  {isConfirmPasswordVisible ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-                </button>
+                <input type='password' {...register('confirm_password', { required: "Confirm Password Is Required", validate: (val) => { if (watch('password') !== val) return "Your Password Donot Match" } })} className=" flex-1 bg-transparent outline-none " placeholder="Confirm Your Password" autoComplete="off" />
               </div>
               {errors?.confirm_password && <p className='text-orange-300 text-sm'>{errors?.confirm_password?.message}</p>}
             </div>
