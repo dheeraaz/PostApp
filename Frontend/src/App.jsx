@@ -1,11 +1,11 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import AuthLayout from './Layouts/AuthLayout.jsx'
-import { Login, Registration, ForgotPassword, ResetPassword, VerifyEmail} from './Modules/Login_Signup/index.js'
+import { Login, Registration, ForgotPassword, ResetPassword, VerifyEmail} from './Pages/Login_Signup/index.js'
 
 import AppLayout from './Layouts/AppLayout.jsx'
-import Home from './Modules/Home/Home.jsx'
+import Home from './Pages/Home/Home.jsx'
 
-import Error from './Modules/Error/Error.jsx'
+import Error from './Pages/Error/Error.jsx'
 
 const myRouter = createBrowserRouter(
   createRoutesFromElements(<>

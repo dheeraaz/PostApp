@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGlobalAppContext } from '../Context/AppContext'
+import { useGlobalAppContext } from '../../Context/AppContext';
 
 const Home = () => {
 
