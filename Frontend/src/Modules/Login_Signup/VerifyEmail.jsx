@@ -44,6 +44,17 @@ const VerifyEmail = ({ otpLength = 6 }) => {
 
     }
 
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+
+        try {
+            console.log(otpFields)
+            setOtpFields(new Array(otpLength).fill(""))
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     useEffect(() => {
         // when the component is first loaded, set the focus in first otp fields
         ref.current[0].focus();
@@ -61,7 +72,7 @@ const VerifyEmail = ({ otpLength = 6 }) => {
                 <div className="text-3xl font-semibold text-center bg-gradient-to-r from-blue-400 to-purple-600  text-transparent bg-clip-text">Verify Email</div>
                 <p className="text-center font-extralight my-4">Enter the {otpLength}-digit code sent to your email address to verify you.</p>
 
-                <form className='my-6 flex flex-col gap-4'>
+                <form className='my-6 flex flex-col gap-4' onSubmit={handleSubmit}>
                     <div className='flex flex-row gap-2'>
                         {otpFields.map((value, index) => {
                             return <input

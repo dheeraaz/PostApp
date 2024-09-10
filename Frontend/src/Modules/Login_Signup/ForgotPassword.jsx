@@ -9,12 +9,10 @@ const ForgotPassword = () => {
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
             email: "",
-            password: ""
         }
     })
 
     const dataSubmit = (data) => {
-        console.log("check")
         try {
             console.log(data)
             reset();

@@ -3,6 +3,10 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import morgan from 'morgan'
 
+// Routes Import
+import homeRouter from './routes/home.route.js'
+import userRouter from './routes/user.route.js'
+
 const app = express();
 
 // middlewares
@@ -22,9 +26,6 @@ app.use(cookieParser())
 // used for logging the http requests concisely
 app.use(morgan("dev"));
 
-// Routes Import
-import homeRouter from './routes/home.route.js'
-import userRouter from './routes/user.route.js'
 
 
 // Routes Declaration

@@ -1,11 +1,16 @@
 import {Router} from 'express'
-const router = Router();
 
+//importing middleware and controllers 
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 import { registerUser,loginUser, logoutUser } from '../controllers/user.controller.js'
- 
-router.route('/register').post(registerUser)
-router.route('/login').post(loginUser)
+
+import { validateWithSchema } from '../middlewares/zod_validator.middleware.js';
+import {registerSchema, loginSchema} from '../validator/zod_validator.schema.js'
+const router = Router();
+
+// declaring routes
+router.route('/register').post(validateWithSchema(registerSchema), registerUser)
+router.route('/login').post(validateWithSchema(loginSchema),loginUser)
 router.route('/logout').post(verifyJWT, logoutUser)
 
 export default router;

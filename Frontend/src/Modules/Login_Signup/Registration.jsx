@@ -36,7 +36,7 @@ const Registration = () => {
           <form action="" onSubmit={handleSubmit(dataSubmit)} className="mt-4 flex flex-col gap-4">
             <div>
               <div className="flex items-center gap-2 bg-gray-600 w-full p-2 rounded-md group border-[1px] border-transparent focus-within:border-blue-500">
-                <FiUser size={20} /> <input type="text" {...register('username', { required: "Username Is Required" })} className=" flex-1 bg-transparent outline-none " placeholder="Enter Your User Name" autoComplete="off" />
+                <FiUser size={20} /> <input type="text" {...register('username', { required: "Username Is Required", minLength: {value:3, message:"Username must be of atleast 3 characters"}, maxLength: {value:40, message:"Username must be of less than 40 characters"} })} className=" flex-1 bg-transparent outline-none " placeholder="Enter Your User Name" autoComplete="off" />
               </div>
               {errors?.username && <p className='text-orange-300 text-sm'>{errors?.username?.message}</p>}
             </div>
