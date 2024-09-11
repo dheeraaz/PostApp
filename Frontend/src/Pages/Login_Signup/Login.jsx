@@ -36,7 +36,7 @@ const Login = () => {
       if (error?.response?.data?.name === "Validation Error") {
         toast.error(error?.response?.data?.errors[0]?.message || "Form validation Error")
       } else {
-        toast.error(error?.response?.data?.message || error?.message || "Error In Registration")
+        toast.error(error?.response?.data?.message || error?.message || "Error In Login")
       }
     } finally {
       setIsSubmitting(false)

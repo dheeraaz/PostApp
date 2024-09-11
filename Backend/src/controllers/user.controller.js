@@ -1,10 +1,12 @@
 import { User } from "../models/user.model.js";
 import { Otp } from "../models/otp.model.js";
 import { asyncHandler, apiError, apiResponse, sendEmail } from "../utils/index.js";
-import { otpEmailBody } from "../utils/emailBody.js";
+import { otpEmailBody, welcomeEmailBody } from "../utils/emailBody.js";
 import { cookieOptions } from "../constants/constants.js";
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
+import jwt from "jsonwebtoken";
+
 
 //function for generating access token and refresh token
 const generateAccessAndRefreshToken = async (userid) => {
@@ -33,7 +35,6 @@ const generateAccessAndRefreshToken = async (userid) => {
 };
 
 //function for generating otp code
-
 const generateOTP = (otpLength) => {
     const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let otp = '';
@@ -42,7 +43,6 @@ const generateOTP = (otpLength) => {
     }
     return otp;
 }
-
 
 //registering user
 const registerUser = asyncHandler(async (req, res) => {
@@ -75,20 +75,20 @@ const registerUser = asyncHandler(async (req, res) => {
         otpcode,
     })
 
-    const isEmailSent = await sendEmail(createdUser.email, "Email Verification", otpEmailBody(createdUser.username, otpcode))
+    const isEmailSent = await sendEmail(createdUser.email, "Email Verification: postApp", otpEmailBody(createdUser.username, otpcode))
     if (!isEmailSent) console.log("Email Couldn't be sent")
 
-    // otpToken generation
-    const otpToken = await createdUser.generateOtpToken(otpcode);
+    // otpToken generation [only user's email id is enough in token]
+    const otpToken = await createdUser.generateOtpToken();
 
     // sending api response
     res
         .status(200)
-        .cookie("otpToken", otpToken, { ...cookieOptions, maxAge: 30 * 60 * 1000 })
+        .cookie("otptoken", otpToken, { ...cookieOptions, maxAge: 30 * 60 * 1000 })
         .json(
             new apiResponse(
                 201,
-                "",
+                {},
                 `Successfully Registered User \n Please Verify Your Email`
             )
         );
@@ -101,25 +101,25 @@ const loginUser = asyncHandler(async (req, res) => {
     // checkinng if the user is already registered
     const user = await User.findOne({ email });
     if (!user) throw new apiError(404, "Invalid User Credentials -E");
-    
+
     // checking if the password entered by user is correct or not
     const isPasswordValid = await user.isPasswordCorrect(password);
     if (!isPasswordValid) throw new apiError(404, "Invalid User Credentials -P");
-    
+
     // checking if the user is verified or not, if not verified sending email for verification
     if (!user.isVerified) {
         //  generate 6 digit otp code
         const otpcode = generateOTP(6);
-        
-         // Hash the OTP code before updating the document [.pre("save") doesnt work on findOneAndUpdate]
-         const hashedOtpcode = await bcrypt.hash(otpcode, 10);
+
+        // Hash the OTP code before updating the document [.pre("save") doesnt work on findOneAndUpdate]
+        const hashedOtpcode = await bcrypt.hash(otpcode, 10);
 
         // here, otp if email already exists, then only otp field is updated [encrypted before save]
         // But, if the document has expired, and no such email is found then new document is created
         await Otp.findOneAndUpdate(
             { email: user.email }, // Filter by email
             {
-                $set: { otpcode:hashedOtpcode }, // Update the OTP field
+                $set: { otpcode: hashedOtpcode }, // Update the OTP field
                 $setOnInsert: { email: user.email } // Set the email field only if inserting
             },
             {
@@ -132,14 +132,14 @@ const loginUser = asyncHandler(async (req, res) => {
         const isEmailSent = await sendEmail(user.email, "Email Verification", otpEmailBody(user.username, otpcode))
         if (!isEmailSent) console.log("Email Couldn't be sent")
 
-        // otpToken generation
-        const otpToken = await user.generateOtpToken(otpcode);
+        // otpToken generation [only user's email id is enough in token]
+        const otpToken = await user.generateOtpToken();
 
         // sending api response to unverified user
         return res
-        .status(200)
-        .cookie("otpToken", otpToken, { ...cookieOptions, maxAge: 30 * 60 * 1000 })
-        .json(new apiResponse(202,"",`User is not verified \n Please Verify Your Email`));
+            .status(200)
+            .cookie("otptoken", otpToken, { ...cookieOptions, maxAge: 30 * 60 * 1000 })
+            .json(new apiResponse(202, {}, `User is not verified \n Please Verify Your Email`));
     }
 
     // creating access and refresh token
@@ -159,7 +159,61 @@ const loginUser = asyncHandler(async (req, res) => {
         .cookie("refreshtoken", refreshtoken, cookieOptions)
         .json(new apiResponse(200, loggedInUser, "Successfully LoggedIn User"));
 });
-// login user
+
+//verify user
+const verifyEmail = asyncHandler(async (req, res) => {
+    // otpToken saved in user's browser
+    const otpToken = req?.cookies?.otptoken;
+    if (!otpToken) throw new apiError(401, "Unauthorized Request");
+
+    // receiving otpFields sent from frontend
+    const { otpFields } = req.body;
+
+    // converting Otp fields into string
+    const otpSentByUser = otpFields.join("");
+
+    // checking if the otpToken is valid or not
+    const decodedToken = await jwt.verify(otpToken, process.env.OTP_TOKEN_SECRET);
+
+    // finding the otp document saved in database
+    const otpDocument = await Otp.findOne({ email: decodedToken.email });
+
+    if (!otpDocument) throw new apiError(401, "Unauthorized Request");
+
+    // decrpting the otp stored in database || bcrypt stores everything as string
+    const isOtpValid = await bcrypt.compare(otpSentByUser, otpDocument.otpcode)
+
+    if (!isOtpValid) throw new apiError(401, "Otp Doesn't Match")
+
+    // now update the user to verified, generate access token and refresh token and proceed user to login [no need to login again] 
+    const verifiedUser = await User.findOneAndUpdate({ email: decodedToken.email }, { $set: { isVerified: true } }, { new: true });
+
+    // creating access and refresh token //also saves refresh token in user's document
+    const { refreshtoken, accesstoken } = await generateAccessAndRefreshToken(
+        verifiedUser._id
+    );
+    //  delete the otp document from database
+    await Otp.findOneAndDelete({ email: decodedToken.email });
+
+    // Again finding the logged in user by removing password and refreshtoken field
+    const loggedInUser = await User.findById(verifiedUser._id).select(
+        "-password -refreshtoken"
+    );
+
+    const isEmailSent = await sendEmail(loggedInUser.email, "Welcome Email - postApp", welcomeEmailBody(loggedInUser.username))
+    if (!isEmailSent) console.log("Email Couldn't be sent")
+
+    // sending api response to verified+loggedIn user and clearing otpToken from Browser
+    res
+        .status(200)
+        .clearCookie("otptoken", cookieOptions)
+        .cookie("accesstoken", accesstoken, cookieOptions)
+        .cookie("refreshtoken", refreshtoken, cookieOptions)
+        .json(new apiResponse(200, loggedInUser, "Successfully LoggedIn User"));
+
+})
+
+// logout user
 const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
@@ -174,4 +228,9 @@ const logoutUser = asyncHandler(async (req, res) => {
         .json(new apiResponse(201, {}, "User Logged Out Successfully"));
 });
 
-export { registerUser, loginUser, logoutUser };
+export {
+    registerUser,
+    loginUser,
+    verifyEmail,
+    logoutUser
+};

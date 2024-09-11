@@ -68,9 +68,9 @@ userSchema.methods.generateRefreshToken = async function () {
   });
 };
 
-userSchema.methods.generateOtpToken = async function (otpcode) {
+userSchema.methods.generateOtpToken = async function () {
   return await jwt.sign(
-    { email: this.email, otpcode: otpcode },
+    { email: this.email },
     process.env.OTP_TOKEN_SECRET,
     { expiresIn: process.env.OTP_TOKEN_EXPIRY }
   );

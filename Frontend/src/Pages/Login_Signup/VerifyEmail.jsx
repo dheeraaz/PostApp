@@ -1,9 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { verifyEmail } from '../../Apis/authApi';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const VerifyEmail = ({ otpLength = 6 }) => {
     const [otpFields, setOtpFields] = useState(new Array(otpLength).fill(""))
     const [showVerifyButton, setShowVerifyButton] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const ref = useRef([]);
+    const navigate = useNavigate();
 
     const handleKeyDown = (e, index) => {
         const key = e.key;
@@ -38,20 +43,31 @@ const VerifyEmail = ({ otpLength = 6 }) => {
         setOtpFields(copyOtpFields)
     }
 
-    const handleChange = ()=>{
+    const handleChange = () => {
         // just to avoid the console error shown for not using onChange method in react form
         return;
 
     }
 
-    const handleSubmit = async (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
+        console.log(otpFields)
         try {
-            console.log(otpFields)
-            setOtpFields(new Array(otpLength).fill(""))
+            setIsSubmitting(true);
+            // sending otpFields to backend as: {otpFields: ['1','2','3','4','9','0']}
+            const response = await verifyEmail({ otpFields: otpFields });
+            if (response.status === 200) {
+                toast.success(response?.data?.message);
+                navigate('/home')
+            }
         } catch (error) {
-            console.error(error)
+            if (error?.response?.data?.name === "Validation Error") {
+                toast.error(error?.response?.data?.errors[0]?.message || "Form validation Error")
+            } else {
+                toast.error(error?.response?.data?.message || error?.message || "Error In Verfifying Email")
+            }
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
@@ -60,9 +76,9 @@ const VerifyEmail = ({ otpLength = 6 }) => {
         ref.current[0].focus();
     }, [])
 
-    useEffect(() => { 
+    useEffect(() => {
         // this sets isAllOtpFieldNumber if all the fields are Number
-        const isAllOtpFieldNumber = otpFields.every((value)=>/^\d+$/.test(value))
+        const isAllOtpFieldNumber = otpFields.every((value) => /^\d+$/.test(value))
         setShowVerifyButton(isAllOtpFieldNumber);
     }, [otpFields])
 
@@ -83,12 +99,11 @@ const VerifyEmail = ({ otpLength = 6 }) => {
                                 onChange={handleChange}
                                 onKeyDown={(e) => handleKeyDown(e, index)}
                                 // className='text-center rounded-md w-1/6 h-12 bg-gray-600 outline-none border-[1px] border-transparent focus:border-blue-500'
-                                className={`text-center rounded-md ${otpLength===4 && 'w-1/4'} ${otpLength===6 && 'w-1/6'} h-12 bg-gray-600 outline-none border-[1px] border-transparent focus:border-blue-500`}
+                                className={`text-center rounded-md ${otpLength === 4 && 'w-1/4'} ${otpLength === 6 && 'w-1/6'} h-12 bg-gray-600 outline-none border-[1px] border-transparent focus:border-blue-500`}
                             />
                         })}
                     </div>
-                    {showVerifyButton && <input type="submit" value="Verify Email" className="bg-_accent mt-4 px-4 py-2 rounded-md hover:cursor-pointer hover:animate-pulse" />}
-
+                    {showVerifyButton && <input type="submit" disabled={isSubmitting} value={`${isSubmitting ? "Verifying..." : "Verify Email"}`} className={`px-4 py-2 rounded-md ${isSubmitting ? 'cursor-not-allowed bg-gray-600' : 'bg-_accent hover:cursor-pointer hover:animate-pulse'}`} />}
                 </form>
             </div>
         </div>
