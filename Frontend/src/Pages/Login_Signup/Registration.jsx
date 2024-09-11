@@ -1,11 +1,15 @@
-import React from "react"
+import React, { useState } from "react"
 import { MdOutlineMail } from "react-icons/md";
 import { FiLock, FiUser } from "react-icons/fi";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../Apis/authApi.js";
+
+import { toast } from 'react-toastify';
 
 const Registration = () => {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, watch, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
@@ -17,14 +21,25 @@ const Registration = () => {
     }
   })
 
-  const dataSubmit = (data) => {
+  const dataSubmit = async (data) => {
     try {
-      console.log(data)
-      reset();
+      setIsSubmitting(true);
+      const response = await registerUser(data);
+      if(response.status === 200){
+        toast.success(response?.data?.message)
+        reset();
+        navigate('/verifyemail')
+      }
     } catch (error) {
-      console.error(error)
+      if (error?.response?.data?.name === "Validation Error") {
+       toast.error(error?.response?.data?.errors[0]?.message || "Form validation Error")
+      }else{
+       toast.error(error?.response?.data?.message || error?.message || "Error In Registration")
+      }
+    }finally{
+      setIsSubmitting(false)
     }
-  }
+  };
 
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i
 
@@ -68,7 +83,7 @@ const Registration = () => {
               {errors?.confirm_password && <p className='text-orange-300 text-sm'>{errors?.confirm_password?.message}</p>}
             </div>
 
-            <input type="submit" value="Register" className="bg-_accent px-4 py-2 rounded-md hover:cursor-pointer hover:animate-pulse" />
+            <input type="submit" disabled ={isSubmitting} value={`${isSubmitting ? "Registering...": "Register"}`}  className={`px-4 py-2 rounded-md ${isSubmitting ? 'cursor-not-allowed bg-gray-600' : 'bg-_accent hover:cursor-pointer hover:animate-pulse'}`} />
           </form>
         </div>
         <div className="bg-gray-800 rounded-b-md mt-8 flex justify-center gap-2 p-4 font-light">
@@ -79,5 +94,6 @@ const Registration = () => {
       </div>
   )
 }
+
 
 export default Registration

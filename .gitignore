@@ -3,6 +3,10 @@ Frontend/node_modules
 Frontend/dist
 Frontend/dist-ssr
 Frontend/*.local
+Frontend/.env
+Frontend/.env.test
+Frontend/.env.production
+
 
 #Backend
 Backend/node_modules
