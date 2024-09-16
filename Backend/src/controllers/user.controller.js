@@ -1,7 +1,8 @@
 import { User } from "../models/user.model.js";
 import { Otp } from "../models/otp.model.js";
+import { PwdReset } from "../models/pwd_reset.model.js";
 import { asyncHandler, apiError, apiResponse, sendEmail } from "../utils/index.js";
-import { otpEmailBody, welcomeEmailBody } from "../utils/emailBody.js";
+import { otpEmailBody, welcomeEmailBody, pwdResetEmailBody } from "../utils/emailBody.js";
 import { cookieOptions } from "../constants/constants.js";
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
@@ -114,7 +115,7 @@ const loginUser = asyncHandler(async (req, res) => {
         // Hash the OTP code before updating the document [.pre("save") doesnt work on findOneAndUpdate]
         const hashedOtpcode = await bcrypt.hash(otpcode, 10);
 
-        // here, otp if email already exists, then only otp field is updated [encrypted before save]
+        // here, in otp collections, if email already exists, then only otp field is updated [encrypted before save]
         // But, if the document has expired, and no such email is found then new document is created
         await Otp.findOneAndUpdate(
             { email: user.email }, // Filter by email
@@ -213,6 +214,75 @@ const verifyEmail = asyncHandler(async (req, res) => {
 
 })
 
+//handling password forgot related credentials and sending email
+const forgotPassword = asyncHandler(async (req, res) => {
+    // getting the email address entered by user
+    const { email } = req.body;
+
+    // checking if the user is valid or not
+    const isvalidUser = await User.findOne({ email });
+
+    if (!isvalidUser) throw new apiError(404, "Invalid User Credentials - User doesn't exists");
+
+    // generating token with user's email
+    const pwdResetToken = await isvalidUser.generatePwdResetToken();
+
+    //Now save the email and pwdResetToken in PwdReset collections for futher validation 
+    // Here the old docs is replaced by new one, if the document with same email is already present and 
+    // new document created if no such document is found
+    const resetDocs = await PwdReset.findOneAndUpdate(
+        { email: isvalidUser.email }, //filter by email
+        { $set: { pwdResetToken } }, //Replace or update the pwdResetToken field
+        { upsert: true, new: true }   // Create a new document if no match is found, return the new document
+    );
+    if (!resetDocs) throw new apiError(500, 'Internal server error while resetting password')
+
+    const resetPwdRoute = `${process.env.CORS_ORIGIN}/resetpassword/${pwdResetToken}`;
+    // sending email to user with reset link to reset his/password;
+    const isEmailSent = await sendEmail(isvalidUser.email, "Password Reset Request for PostApp", pwdResetEmailBody(isvalidUser.username, resetPwdRoute));
+    if (!isEmailSent) throw new apiError(500, "Sorry, Reset email couldn't be sent at this moment")
+
+    res
+        .status(200)
+        .json(new apiResponse(204, {}, "Successfully sent password reset email"));
+
+})
+
+//resetting user's password
+const resetPassword = asyncHandler(async (req, res) => {
+    const { password: newPassword, pwdResetToken } = req.body;
+
+    // checking if the token is valid or not 
+    const decodedResetId = await jwt.verify(pwdResetToken, process.env.RESET_PWD_TOKEN_SECRET)
+    const { email: userEmail } = decodedResetId;
+
+    // checking if the reset password document has been deleted or not
+    // preventing user to reset password with same link for multiple times
+    const pwdResetDocs = await PwdReset.findOne({ email: userEmail });
+    if (!pwdResetDocs) throw new apiError(401, "Unauthorized Request");
+
+    // checking if both the token are same or not
+    if(pwdResetToken !== pwdResetDocs.pwdResetToken) throw new apiError(401, "Unauthorized Request");
+
+    // resetting user's password
+    
+    // This will not trigger pre("save") hook, it is triggered only for methods like: save() or create() 
+    // const user = await User.findOneAndUpdate({ email: userEmail }, { $set: { password: newPassword } }); 
+
+    const user = await User.findOne({email:userEmail});
+    if (!user) throw new apiError(404, "User Not Found");
+
+    
+    user.password = newPassword;
+    await user.save({validateBeforeSave:false});
+
+    //after resetting user's password, delete the pwd_reset docs from database
+    // even if the document is not present this delete operation will cause no error
+    await PwdReset.deleteOne({ email: userEmail });
+
+    res.status(200).json(new apiResponse(204, {}, "Successfully Changed the password"))
+})
+
 // logout user
 const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
@@ -232,5 +302,7 @@ export {
     registerUser,
     loginUser,
     verifyEmail,
-    logoutUser
+    logoutUser,
+    forgotPassword,
+    resetPassword,
 };

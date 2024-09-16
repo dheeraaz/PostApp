@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 import AuthLayout from './Layouts/AuthLayout.jsx'
-import { Login, Registration, ForgotPassword, ResetPassword, VerifyEmail} from './Pages/Login_Signup/index.js'
+import { Login, Registration, ForgotPassword, ResetPassword, VerifyEmail } from './Pages/Login_Signup/index.js'
 
 import AppLayout from './Layouts/AppLayout.jsx'
 import Home from './Pages/Home/Home.jsx'
@@ -13,11 +13,11 @@ const myRouter = createBrowserRouter(
       <Route path='' element={<Login />} />
       <Route path='/registration' element={<Registration />} />
       <Route path='/forgotpassword' element={<ForgotPassword />} />
-      <Route path='/resetpassword' element={<ResetPassword />} />
+      <Route path='/resetpassword/:pwdResetToken' element={<ResetPassword />} />
       <Route path='/verifyemail' element={<VerifyEmail />} />
     </Route>
-    <Route path='/home' element={<AppLayout/>}>
-    <Route path='' element={<Home />}/>
+    <Route path='/home' element={<AppLayout />}>
+      <Route path='' element={<Home />} />
     </Route>
     <Route path='*' element={<Error />} />
   </>

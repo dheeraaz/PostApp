@@ -76,4 +76,9 @@ userSchema.methods.generateOtpToken = async function () {
   );
 };
 
+userSchema.methods.generatePwdResetToken = async function(){
+  return await jwt.sign({ email: this.email }, process.env.RESET_PWD_TOKEN_SECRET, { expiresIn: process.env.RESET_PWD_TOKEN_EXPIRY })
+}
+
+
 export const User = mongoose.model("User", userSchema);

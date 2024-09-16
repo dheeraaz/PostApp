@@ -27,3 +27,18 @@ Thank you for choosing PostApp. We look forward to serving you! \n
 Best regards,
 The PostApp Team`
 }
+
+export const pwdResetEmailBody = (username, resetLink) => {
+return `Dear ${username},
+
+We received a request to reset the password for your PostApp account. To reset your password, please click the link below:\n
+
+Reset Link: ${resetLink}\n
+
+This link is valid for the next 30 minutes. After that, you’ll need to request a new password reset.\n
+
+If you did not request this password reset, please ignore this email or contact us immediately at dheeraazacharya273@gmail.com to report any unauthorized activity.\n
+
+Best regards,
+The PostApp Team`
+}

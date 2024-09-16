@@ -93,6 +93,7 @@ const resetPasswordSchema = z
     confirm_password: z.string({
       required_error: "Confirm password is required",
     }),
+    pwdResetToken: z.string().optional(), //resetid won't be validated if not present.
   })
   .refine(
     (allData) => {
