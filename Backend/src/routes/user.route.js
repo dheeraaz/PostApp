@@ -27,8 +27,12 @@ router
   .post(validateWithSchema(registerSchema), registerUser);
 router.route("/login").post(validateWithSchema(loginSchema), loginUser);
 router.route("/verifyemail").post(validateWithSchema(otpSchema), verifyEmail);
-router.route("/forgotpassword").post(validateWithSchema(forgotPasswordSchema), forgotPassword);
-router.route("/resetpassword").post(validateWithSchema(resetPasswordSchema), resetPassword);
+router
+  .route("/forgotpassword")
+  .post(validateWithSchema(forgotPasswordSchema), forgotPassword);
+router
+  .route("/resetpassword")
+  .post(validateWithSchema(resetPasswordSchema), resetPassword);
 router.route("/logout").post(verifyJWT, logoutUser);
 
 export default router;

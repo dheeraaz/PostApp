@@ -22,7 +22,6 @@ const ResetPassword = () => {
     try {
       setIsSubmitting(true);
       const response = await resetPassword({ ...data, pwdResetToken })
-      console.log("====>",response)
       if (response?.data?.statusCode === 204) {
         toast.success(response?.data?.message);
         navigate('/')

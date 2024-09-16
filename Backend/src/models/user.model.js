@@ -69,16 +69,17 @@ userSchema.methods.generateRefreshToken = async function () {
 };
 
 userSchema.methods.generateOtpToken = async function () {
-  return await jwt.sign(
-    { email: this.email },
-    process.env.OTP_TOKEN_SECRET,
-    { expiresIn: process.env.OTP_TOKEN_EXPIRY }
-  );
+  return await jwt.sign({ email: this.email }, process.env.OTP_TOKEN_SECRET, {
+    expiresIn: process.env.OTP_TOKEN_EXPIRY,
+  });
 };
 
-userSchema.methods.generatePwdResetToken = async function(){
-  return await jwt.sign({ email: this.email }, process.env.RESET_PWD_TOKEN_SECRET, { expiresIn: process.env.RESET_PWD_TOKEN_EXPIRY })
-}
-
+userSchema.methods.generatePwdResetToken = async function () {
+  return await jwt.sign(
+    { email: this.email },
+    process.env.RESET_PWD_TOKEN_SECRET,
+    { expiresIn: process.env.RESET_PWD_TOKEN_EXPIRY }
+  );
+};
 
 export const User = mongoose.model("User", userSchema);
