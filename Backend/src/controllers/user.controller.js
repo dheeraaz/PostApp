@@ -18,6 +18,8 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 
+import logger from "../utils/logger.js";
+
 //function for generating access token and refresh token
 const generateAccessAndRefreshToken = async (userid) => {
   try {
@@ -39,7 +41,7 @@ const generateAccessAndRefreshToken = async (userid) => {
       refreshtoken,
     };
   } catch (error) {
-    console.log(error);
+    logger.error("Error in generating access and refresh token==>", error);
     throw new apiError(500, "Error In Generating Access And Refresh Token");
   }
 };
@@ -91,7 +93,8 @@ const registerUser = asyncHandler(async (req, res) => {
     "Email Verification: postApp",
     otpEmailBody(createdUser.username, otpcode)
   );
-  if (!isEmailSent) console.log("Email Couldn't be sent");
+  // here, even if the email is not sent, user is registered and later email is sent while he tries to login
+  if (!isEmailSent) logger.warn("Email couldn't be sent - while registering user [sending otp code]");
 
   // otpToken generation [only user's email id is enough in token]
   const otpToken = await createdUser.generateOtpToken();
@@ -149,7 +152,7 @@ const loginUser = asyncHandler(async (req, res) => {
       "Email Verification",
       otpEmailBody(user.username, otpcode)
     );
-    if (!isEmailSent) console.log("Email Couldn't be sent");
+    if (!isEmailSent) throw new apiError(500, `Verification email couldn't be sent \n Please retry after some time`)
 
     // otpToken generation [only user's email id is enough in token]
     const otpToken = await user.generateOtpToken();
@@ -237,7 +240,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
     "Welcome Email - postApp",
     welcomeEmailBody(loggedInUser.username)
   );
-  if (!isEmailSent) console.log("Email Couldn't be sent");
+  if (!isEmailSent) logger.warn("Email couldn't be sent to user - Welcome email after verifying user");
 
   // sending api response to verified+loggedIn user and clearing otpToken from Browser
   res
@@ -342,7 +345,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     "Your Password Has Been Successfully Changed",
     pwdResetSuccessEmailBody(user.username)
   );
-  if (!isEmailSent) console.log("Email couldn't be sent");
+  if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
 
   res
     .status(200)

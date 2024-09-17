@@ -1,0 +1,7 @@
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/forgotpassword\",\"status\":\"200\",\"responseTime\":\"3657.677\"}","timestamp":"2024-09-17T03:12:42.803Z"}
+{"level":"\u001b[33mwarn\u001b[39m","message":"Email couldn't be sent - confirmation email of password reset","timestamp":"2024-09-17T03:13:40.618Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/resetpassword\",\"status\":\"200\",\"responseTime\":\"314.367\"}","timestamp":"2024-09-17T03:13:40.621Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/forgotpassword\",\"status\":\"404\",\"responseTime\":\"57.076\"}","timestamp":"2024-09-17T03:16:36.952Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/forgotpassword\",\"status\":\"404\",\"responseTime\":\"41.950\"}","timestamp":"2024-09-17T03:16:41.916Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/forgotpassword\",\"status\":\"200\",\"responseTime\":\"3655.787\"}","timestamp":"2024-09-17T03:16:51.201Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/resetpassword\",\"status\":\"200\",\"responseTime\":\"4013.856\"}","timestamp":"2024-09-17T03:17:52.484Z"}
