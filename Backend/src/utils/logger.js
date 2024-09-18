@@ -1,9 +1,9 @@
 import { createLogger, format, transports } from "winston";
 
-import path from "path"; 
+import path from "path";
 
 // __dirname is not defined in ES Module Scope, so this small tweak is needed to replicate the __dirname functionality as of commonjs
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
 

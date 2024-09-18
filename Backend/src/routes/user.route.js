@@ -10,6 +10,7 @@ import {
   forgotPassword,
   resetPassword,
   isUserLoggedIn,
+  refreshTokens,
 } from "../controllers/user.controller.js";
 
 import { validateWithSchema } from "../middlewares/zod_validator.middleware.js";
@@ -35,6 +36,8 @@ router
   .route("/resetpassword")
   .post(validateWithSchema(resetPasswordSchema), resetPassword);
 router.route("/logout").post(verifyJWT, logoutUser);
-router.route('/isuserloggedin').get(isUserLoggedIn);
+router.route("/isuserloggedin").get(isUserLoggedIn);
+
+router.route("/refreshtokens").post(refreshTokens);
 
 export default router;

@@ -1,5 +1,4 @@
-import { asyncHandler, apiError, apiResponse } from "../utils/index.js";
-import { cookieOptions } from "../constants/constants.js";
+import { asyncHandler, apiError } from "../utils/index.js";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 
@@ -30,12 +29,17 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       //here token has expired, so proceed to take necessary action
-      res
-        .status(200)
-        .clearCookie("accesstoken", cookieOptions)
-        .json(new apiResponse(204, null, "Session Expired, Logged Out"));
+      throw new apiError(
+        401,
+        "Access Token Has Expired",
+        "",
+        "AccessTokenExpired"
+      );
     } else {
-      throw new apiError(401, "Invalid Token");
+      throw new apiError(
+        error?.statusCode || 500,
+        error?.message || "Error in validating token"
+      );
     }
   }
 });

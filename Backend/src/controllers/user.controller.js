@@ -56,11 +56,11 @@ const generateOTP = (otpLength) => {
   return otp;
 };
 
+// this is used for managing protected route in frontend
 const isUserLoggedIn = asyncHandler(async (req, res) => {
   const token = req.cookies?.accesstoken;
 
   if (!token) throw new apiError(401, "User Not Logged In");
-  
 
   const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
@@ -69,13 +69,13 @@ const isUserLoggedIn = asyncHandler(async (req, res) => {
   );
 
   if (!loggedInUser) throw new apiError(404, "User Not Found");
-  
 
   return res
     .status(200)
     .json(new apiResponse(201, loggedInUser, "User Is Logged In"));
 });
 
+// =====================Start: Authentication and Authorization=================
 //registering user
 const registerUser = asyncHandler(async (req, res) => {
   // getting the data entered by user
@@ -120,7 +120,10 @@ const registerUser = asyncHandler(async (req, res) => {
   // Here, the response is first sent, then email is sent and promise is resolved increasing the api response time
   sendEmailPromise
     .then((isEmailSent) => {
-      if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+      if (!isEmailSent)
+        logger.warn(
+          "Email couldn't be sent - confirmation email of password reset"
+        );
     })
     .catch((err) => logger.error("Error sending email: ", err));
 
@@ -181,7 +184,11 @@ const loginUser = asyncHandler(async (req, res) => {
       "Email Verification",
       otpEmailBody(user.username, otpcode)
     );
-    if (!isEmailSent) throw new apiError(500, `Verification email couldn't be sent \n Please retry after some time`)
+    if (!isEmailSent)
+      throw new apiError(
+        500,
+        `Verification email couldn't be sent \n Please retry after some time`
+      );
 
     // otpToken generation [only user's email id is enough in token]
     const otpToken = await user.generateOtpToken();
@@ -272,9 +279,14 @@ const verifyEmail = asyncHandler(async (req, res) => {
   );
 
   // handling the sendEmailPromise once the response is sent to user
-  sendEmailPromise.then((isEmailSent) => {
-    if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
-  }).catch((err) => logger.error("Error sending email: ", err))
+  sendEmailPromise
+    .then((isEmailSent) => {
+      if (!isEmailSent)
+        logger.warn(
+          "Email couldn't be sent - confirmation email of password reset"
+        );
+    })
+    .catch((err) => logger.error("Error sending email: ", err));
 
   // sending api response to verified+loggedIn user and clearing otpToken from Browser
   res
@@ -320,10 +332,12 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
   sendEmailPromise
     .then((isEmailSent) => {
-      if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+      if (!isEmailSent)
+        logger.warn(
+          "Email couldn't be sent - confirmation email of password reset"
+        );
     })
     .catch((err) => logger.error("Error sending email: ", err));
-
 
   res
     .status(200)
@@ -387,10 +401,12 @@ const resetPassword = asyncHandler(async (req, res) => {
   // Here, the response is first sent, then email is sent and promise is resolved increasing the api response time
   sendEmailPromise
     .then((isEmailSent) => {
-      if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+      if (!isEmailSent)
+        logger.warn(
+          "Email couldn't be sent - confirmation email of password reset"
+        );
     })
     .catch((err) => logger.error("Error sending email: ", err));
-
 
   res
     .status(200)
@@ -409,7 +425,50 @@ const logoutUser = asyncHandler(async (req, res) => {
     .status(200)
     .clearCookie("accesstoken", cookieOptions)
     .clearCookie("refreshtoken", cookieOptions)
-    .json(new apiResponse(201, {}, "User Logged Out Successfully"));
+    .json(new apiResponse(202, {}, "User Logged Out Successfully"));
+});
+
+// =====================End: Authentication and Authorization=================
+
+// for refreshing access token using refresh token of user
+const refreshTokens = asyncHandler(async (req, res) => {
+  const refToken = req?.cookies?.refreshtoken;
+
+  if (!refToken)
+    throw new apiError(401, "Unauthorized Request - no refresh token");
+
+  try {
+    const decodedRefToken = await jwt.verify(
+      refToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+
+    const user = await User.findById(decodedRefToken._id);
+
+    if (!user) throw new apiError(404, "User not found");
+
+    // this will generate both access token and refresh token, updates refreshtoken in database and also handles the error
+    const { refreshtoken, accesstoken } = generateAccessAndRefreshToken(
+      user._id
+    );
+
+    res
+      .status(200)
+      .cookie("accesstoken", accesstoken, cookieOptions)
+      .cookie("refreshtoken", refreshtoken, cookieOptions)
+      .json(
+        new apiResponse(202, {}, "Successfully refreshed the access token")
+      );
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      throw new apiError(401, `Session Expired \n Please Login Again`);
+    } else {
+      throw new apiError(
+        error?.statusCode || 401,
+        error?.message || "Unauthorized User"
+      );
+    }
+  }
 });
 
 export {
@@ -420,4 +479,5 @@ export {
   logoutUser,
   forgotPassword,
   resetPassword,
+  refreshTokens,
 };

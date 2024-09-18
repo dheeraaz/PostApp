@@ -8,7 +8,7 @@ const AuthLayout = () => {
 
   if(isAppLoading) return <div>Loading...</div>;
 
-  if (isLoggedIn) return <Navigate to='/home' replace/>
+  // if (isLoggedIn) return <Navigate to='/home'/>
 
   return (
     <main className='min-h-screen flex flex-col'>
