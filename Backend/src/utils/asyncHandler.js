@@ -1,3 +1,5 @@
+// import logger from "./logger.js";
+
 const asyncHandler = (fn) => {
   return async (req, res, next) => {
     try {

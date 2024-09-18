@@ -88,15 +88,23 @@ const registerUser = asyncHandler(async (req, res) => {
     otpcode,
   });
 
-  const isEmailSent = await sendEmail(
+  // here, even if the email is not sent, user is registered and later email is sent while he tries to login
+  // since sendEmail is an aynchronous function, and it will be executed asynchronously returning function
+  // if we use await keyword, it will wait for the completion of sendEmail function, which will increase the api response time
+  const sendEmailPromise = sendEmail(
     createdUser.email,
     "Email Verification: postApp",
     otpEmailBody(createdUser.username, otpcode)
   );
-  // here, even if the email is not sent, user is registered and later email is sent while he tries to login
-  if (!isEmailSent) logger.warn("Email couldn't be sent - while registering user [sending otp code]");
 
-  // otpToken generation [only user's email id is enough in token]
+  // Here, the response is first sent, then email is sent and promise is resolved increasing the api response time
+  sendEmailPromise
+    .then((isEmailSent) => {
+      if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+    })
+    .catch((err) => logger.error("Error sending email: ", err));
+
+  // otpToken generation [saving user's email id in token is enough]
   const otpToken = await createdUser.generateOtpToken();
 
   // sending api response
@@ -147,6 +155,7 @@ const loginUser = asyncHandler(async (req, res) => {
       }
     );
 
+    // while logging, if the user is not verified, we will wait till the email with otp code is sent to user
     const isEmailSent = await sendEmail(
       user.email,
       "Email Verification",
@@ -235,12 +244,17 @@ const verifyEmail = asyncHandler(async (req, res) => {
     "-password -refreshtoken"
   );
 
-  const isEmailSent = await sendEmail(
+  // asynchronously handling the sendEmail function [response is sent first, then email is sent]
+  const sendEmailPromise = sendEmail(
     loggedInUser.email,
     "Welcome Email - postApp",
     welcomeEmailBody(loggedInUser.username)
   );
-  if (!isEmailSent) logger.warn("Email couldn't be sent to user - Welcome email after verifying user");
+
+  // handling the sendEmailPromise once the response is sent to user
+  sendEmailPromise.then((isEmailSent) => {
+    if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+  }).catch((err) => logger.error("Error sending email: ", err))
 
   // sending api response to verified+loggedIn user and clearing otpToken from Browser
   res
@@ -278,16 +292,18 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
   const resetPwdRoute = `${process.env.CORS_ORIGIN}/resetpassword/${pwdResetToken}`;
   // sending email to user with reset link to reset his/password;
-  const isEmailSent = await sendEmail(
+  const sendEmailPromise = sendEmail(
     isvalidUser.email,
     "Password Reset Request for PostApp",
     pwdResetEmailBody(isvalidUser.username, resetPwdRoute)
   );
-  if (!isEmailSent)
-    throw new apiError(
-      500,
-      "Sorry, Reset email couldn't be sent at this moment"
-    );
+
+  sendEmailPromise
+    .then((isEmailSent) => {
+      if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+    })
+    .catch((err) => logger.error("Error sending email: ", err));
+
 
   res
     .status(200)
@@ -340,12 +356,21 @@ const resetPassword = asyncHandler(async (req, res) => {
   await PwdReset.deleteOne({ email: userEmail });
 
   // even if the email is not sent, continue the response
-  const isEmailSent = await sendEmail(
+  // since sendEmail is an aynchronous function, and it will be executed asynchronously returning function
+  // if we use await keyword, it will wait for the completion of sendEmail function, which will increase the api response time
+  const sendEmailPromise = sendEmail(
     userEmail,
     "Your Password Has Been Successfully Changed",
     pwdResetSuccessEmailBody(user.username)
   );
-  if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+
+  // Here, the response is first sent, then email is sent and promise is resolved increasing the api response time
+  sendEmailPromise
+    .then((isEmailSent) => {
+      if (!isEmailSent) logger.warn("Email couldn't be sent - confirmation email of password reset");
+    })
+    .catch((err) => logger.error("Error sending email: ", err));
+
 
   res
     .status(200)
