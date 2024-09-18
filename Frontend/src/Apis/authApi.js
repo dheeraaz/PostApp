@@ -22,6 +22,11 @@ export const verifyEmail = async (frontendData)=>{
 export const forgotPassword = async(frontendData)=>{
     return authApi.post("/users/forgotpassword", frontendData);
 }
+
 export const resetPassword = async(frontendData)=>{
     return authApi.post("/users/resetpassword", frontendData);
+}
+
+export const isUserLoggedIn = async()=>{
+    return authApi.get("/users/isuserloggedin");
 }

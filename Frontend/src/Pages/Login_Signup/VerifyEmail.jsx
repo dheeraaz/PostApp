@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import { verifyEmail } from '../../Apis/authApi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useGlobalAppContext } from '../../Context/AppContext';
 
 const VerifyEmail = ({ otpLength = 6 }) => {
     const [otpFields, setOtpFields] = useState(new Array(otpLength).fill(""))
     const [showVerifyButton, setShowVerifyButton] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false);
     const ref = useRef([]);
+    const {setIsLoggedIn} = useGlobalAppContext();
     const navigate = useNavigate();
 
     const handleKeyDown = (e, index) => {
@@ -58,6 +60,7 @@ const VerifyEmail = ({ otpLength = 6 }) => {
             const response = await verifyEmail({ otpFields: otpFields });
             if (response.status === 200) {
                 toast.success(response?.data?.message);
+                setIsLoggedIn(true);
                 navigate('/home')
             }
         } catch (error) {

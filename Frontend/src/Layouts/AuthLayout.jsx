@@ -1,9 +1,15 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-
+import { useGlobalAppContext } from '../Context/AppContext'
 
 const AuthLayout = () => {
+  const { isLoggedIn, isAppLoading } = useGlobalAppContext();
+
+  if(isAppLoading) return <div>Loading...</div>;
+
+  if (isLoggedIn) return <Navigate to='/home' replace/>
+
   return (
     <main className='min-h-screen flex flex-col'>
       <nav className='p-6'>

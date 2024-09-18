@@ -5,10 +5,12 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../Apis/authApi.js";
 import { toast } from "react-toastify";
+import { useGlobalAppContext } from "../../Context/AppContext.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setIsLoggedIn } = useGlobalAppContext();
 
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -29,6 +31,7 @@ const Login = () => {
           navigate('/verifyemail')
         } else {
           toast.success(response?.data?.message);
+          setIsLoggedIn(true);
           navigate('/home')
         }
       }
@@ -43,8 +46,8 @@ const Login = () => {
     }
   };
 
-  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i
-
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
   return (
     <div className="bg-_primary rounded-md pt-8 mx-auto w-[90%] max-w-[400px]">
       <div className="px-4">

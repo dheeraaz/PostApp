@@ -10,8 +10,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 createRoot(document.getElementById('root')).render(
-  <AppContextProvider>
-    <StrictMode>
+  <StrictMode>
+    <AppContextProvider>
       <App />
 
       <ToastContainer
@@ -27,7 +27,6 @@ createRoot(document.getElementById('root')).render(
         theme="colored"
         transition:Slide
       />
-
-    </StrictMode>
-  </AppContextProvider>
+    </AppContextProvider>
+  </StrictMode>
 )

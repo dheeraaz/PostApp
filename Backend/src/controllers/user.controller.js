@@ -56,6 +56,26 @@ const generateOTP = (otpLength) => {
   return otp;
 };
 
+const isUserLoggedIn = asyncHandler(async (req, res) => {
+  const token = req.cookies?.accesstoken;
+
+  if (!token) throw new apiError(401, "User Not Logged In");
+  
+
+  const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+  const loggedInUser = await User.findById(decodedToken._id).select(
+    "-password"
+  );
+
+  if (!loggedInUser) throw new apiError(404, "User Not Found");
+  
+
+  return res
+    .status(200)
+    .json(new apiResponse(201, loggedInUser, "User Is Logged In"));
+});
+
 //registering user
 const registerUser = asyncHandler(async (req, res) => {
   // getting the data entered by user
@@ -197,7 +217,7 @@ const loginUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accesstoken", accesstoken, cookieOptions)
     .cookie("refreshtoken", refreshtoken, cookieOptions)
-    .json(new apiResponse(200, loggedInUser, "Successfully LoggedIn User"));
+    .json(new apiResponse(201, loggedInUser, "Successfully LoggedIn User"));
 });
 
 //verify user
@@ -393,6 +413,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 export {
+  isUserLoggedIn,
   registerUser,
   loginUser,
   verifyEmail,

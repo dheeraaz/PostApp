@@ -1,15 +1,23 @@
 import React from 'react'
-import {Outlet} from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
+import { useGlobalAppContext } from '../Context/AppContext'
 
 const AppLayout = () => {
+
+  const {isLoggedIn, isAppLoading} = useGlobalAppContext();
+ 
+  if(isAppLoading) return <div>Loading...</div>;
+
+  if(!isLoggedIn) return <Navigate to='/' replace/>;
+
   return (
     <>
-    <header>
+      <header>
         <nav>This is navbar</nav>
-    </header>
-    <main>
+      </header>
+      <main>
         <Outlet />
-    </main>
+      </main>
     </>
   )
 }
