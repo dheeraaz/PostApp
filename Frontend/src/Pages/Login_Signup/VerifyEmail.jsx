@@ -53,7 +53,6 @@ const VerifyEmail = ({ otpLength = 6 }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(otpFields)
         try {
             setIsSubmitting(true);
             // sending otpFields to backend as: {otpFields: ['1','2','3','4','9','0']}

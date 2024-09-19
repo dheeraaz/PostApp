@@ -8,6 +8,7 @@ const asyncHandler = (fn) => {
       res.status(error?.code || error?.statusCode || 500).json({
         statusCode: error?.code || error?.statusCode || 500,
         message: error?.message || "An Unexpected Error Has Occured",
+        name:error?.name || "Api Error",
         success: false,
       });
     }

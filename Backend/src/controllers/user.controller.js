@@ -58,21 +58,10 @@ const generateOTP = (otpLength) => {
 
 // this is used for managing protected route in frontend
 const isUserLoggedIn = asyncHandler(async (req, res) => {
-  const token = req.cookies?.accesstoken;
-
-  if (!token) throw new apiError(401, "User Not Logged In");
-
-  const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-  const loggedInUser = await User.findById(decodedToken._id).select(
-    "-password"
-  );
-
-  if (!loggedInUser) throw new apiError(404, "User Not Found");
-
+  //  if there is valid and unexpired accessToken present, then we will get user details in req.user obtained from auth middleware
   return res
     .status(200)
-    .json(new apiResponse(201, loggedInUser, "User Is Logged In"));
+    .json(new apiResponse(201, req.user, "User Is Logged In"));
 });
 
 // =====================Start: Authentication and Authorization=================
@@ -448,20 +437,25 @@ const refreshTokens = asyncHandler(async (req, res) => {
     if (!user) throw new apiError(404, "User not found");
 
     // this will generate both access token and refresh token, updates refreshtoken in database and also handles the error
-    const { refreshtoken, accesstoken } = generateAccessAndRefreshToken(
-      user._id
-    );
+    const { refreshtoken, accesstoken } = await generateAccessAndRefreshToken(user._id);
+    console.log("refreesh",refreshtoken)
+    console.log("access",accesstoken)
 
     res
       .status(200)
       .cookie("accesstoken", accesstoken, cookieOptions)
       .cookie("refreshtoken", refreshtoken, cookieOptions)
-      .json(
-        new apiResponse(202, {}, "Successfully refreshed the access token")
-      );
+      .json(new apiResponse(200, {}, "Successfully refreshed the access token"));
+
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      throw new apiError(401, `Session Expired \n Please Login Again`);
+      // Clear cookies if refresh token has expired
+      res.clearCookie("accesstoken", cookieOptions);
+      res.clearCookie("refreshtoken", cookieOptions);
+      
+
+      // Inform the frontend to log the user out
+      throw new apiError(401, `Session Expired \nPlease Login Again`, "", "SessionExpired");
     } else {
       throw new apiError(
         error?.statusCode || 401,
@@ -470,6 +464,7 @@ const refreshTokens = asyncHandler(async (req, res) => {
     }
   }
 });
+
 
 export {
   isUserLoggedIn,

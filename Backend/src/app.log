@@ -49,3 +49,8 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.446\"}","timestamp":"2024-09-18T07:49:55.720Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.436\"}","timestamp":"2024-09-18T07:50:19.772Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.526\"}","timestamp":"2024-09-18T07:50:19.775Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"2.912\"}","timestamp":"2024-09-19T06:35:43.516Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.526\"}","timestamp":"2024-09-19T06:35:43.521Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.457\"}","timestamp":"2024-09-19T06:35:48.532Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.739\"}","timestamp":"2024-09-19T06:35:48.535Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/login\",\"status\":\"200\",\"responseTime\":\"500.433\"}","timestamp":"2024-09-19T06:36:08.954Z"}
