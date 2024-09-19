@@ -36,7 +36,7 @@ router
   .route("/resetpassword")
   .post(validateWithSchema(resetPasswordSchema), resetPassword);
 router.route("/logout").post(verifyJWT, logoutUser);
-router.route("/isuserloggedin").get(isUserLoggedIn);
+router.route("/isuserloggedin").get(verifyJWT, isUserLoggedIn);
 
 router.route("/refreshtokens").post(refreshTokens);
 

@@ -8,7 +8,7 @@ const AppLayout = () => {
  
   if(isAppLoading) return <div>Loading...</div>;
 
-  // if(!isLoggedIn) return <Navigate to='/'/>;
+  if(!isLoggedIn) return <Navigate to='/'/>;
 
   return (
     <>
