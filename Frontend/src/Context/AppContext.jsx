@@ -15,8 +15,10 @@ export const AppContextProvider = ({ children }) => {
                 const response = await isUserLoggedIn();
                 if(response?.status===200){
                     setIsLoggedIn(true);
+                    setUserDetails(response.data.data);
                 }else{
                     setIsLoggedIn(false);
+                    setUserDetails({});
                 }
             } catch (error) {
                 if(error?.response && error?.response?.status === 401){

@@ -3,8 +3,7 @@ import AuthLayout from './Layouts/AuthLayout.jsx'
 import { Login, Registration, ForgotPassword, ResetPassword, VerifyEmail } from './Pages/Login_Signup/index.js'
 
 import AppLayout from './Layouts/AppLayout.jsx'
-import Home from './Pages/App_Pages/Home.jsx'
-import Profile from './Pages/App_Pages/Profile.jsx'
+import {Home, Profile, ProfileUser} from './Pages/App_Pages/index.js'
 
 import Error from './Pages/Error/Error.jsx'
 
@@ -20,6 +19,7 @@ const myRouter = createBrowserRouter(
     <Route path='/home' element={<AppLayout />}>
       <Route path='' element={<Home />} />
       <Route path='profile' element={<Profile />} />
+      <Route path='profile/user/:userId' element={<ProfileUser />} />
     </Route>
     <Route path='*' element={<Error />} />
   </>

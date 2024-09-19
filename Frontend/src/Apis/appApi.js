@@ -41,5 +41,9 @@ appApi.interceptors.response.use(function (response) {
 });
 
 export const isUserLoggedIn = async () => {
-    return appApi.get("/users/isuserloggedin");
+    return appApi.get("/auth/isuserloggedin");
+}
+
+export const logOut = async () => {
+    return appApi.post("/auth/logout", {});
 }

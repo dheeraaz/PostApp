@@ -9,7 +9,7 @@ const VerifyEmail = ({ otpLength = 6 }) => {
     const [showVerifyButton, setShowVerifyButton] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false);
     const ref = useRef([]);
-    const {setIsLoggedIn} = useGlobalAppContext();
+    const { setIsLoggedIn, setUserDetails } = useGlobalAppContext();
     const navigate = useNavigate();
 
     const handleKeyDown = (e, index) => {
@@ -60,6 +60,7 @@ const VerifyEmail = ({ otpLength = 6 }) => {
             if (response.status === 200) {
                 toast.success(response?.data?.message);
                 setIsLoggedIn(true);
+                setUserDetails(response?.data?.data);
                 navigate('/home')
             }
         } catch (error) {

@@ -10,7 +10,7 @@ import { useGlobalAppContext } from "../../Context/AppContext.jsx";
 const Login = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setIsLoggedIn } = useGlobalAppContext();
+  const { setIsLoggedIn, setUserDetails } = useGlobalAppContext();
 
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -31,6 +31,7 @@ const Login = () => {
           navigate('/verifyemail')
         } else {
           toast.success(response?.data?.message);
+          setUserDetails(response?.data?.data);
           setIsLoggedIn(true);
           navigate('/home')
         }

@@ -11,7 +11,7 @@ import {
   resetPassword,
   isUserLoggedIn,
   refreshTokens,
-} from "../controllers/user.controller.js";
+} from "../controllers/auth.controller.js";
 
 import { validateWithSchema } from "../middlewares/zod_validator.middleware.js";
 import {
