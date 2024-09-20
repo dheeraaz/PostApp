@@ -10,9 +10,9 @@ const CreatePostButton = ({setIsModalOpen}) => {
         <div className='flex gap-2'>
           <Link
             to='/home/profile'
-            className='inline-block max-w-10 max-h-10 rounded-full'
+            className='inline-block w-10 h-10 rounded-full'
           >
-            <img src={userDetails.profilepic} alt="prfile_img" className='w-full h-full rounded-full bg-gray-700' />
+            <img src={userDetails.profilepic} alt="prfile_img" className='w-full h-full rounded-full bg-gray-700 object-cover' />
           </Link>
           <button onClick={()=>setIsModalOpen(true)} className='bg-gray-600 w-full p-2 rounded-full text-gray-400 text-left pl-4 hover:bg-gray-500'>
             What's on your mind, {userDetails.username.split(" ")[0]}?

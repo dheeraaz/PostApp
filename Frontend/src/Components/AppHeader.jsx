@@ -35,10 +35,10 @@ const AppHeader = () => {
       <div className='flex items-center gap-4'>
         <NavLink
           to='/home/profile'
-          className={({isActive}) => { return `inline-block max-w-10 max-h-10 rounded-full p-[2px] ${isActive ? "bg-gradient-to-r from-blue-600 to-purple-600" : "bg-transparent"}` }}
+          className={({isActive}) => { return `inline-block w-10 h-10 rounded-full p-[2px] ${isActive ? "bg-gradient-to-r from-blue-600 to-purple-600" : "bg-transparent"}` }}
           end
         >
-          <img src={userDetails.profilepic} alt="prfile_img" className='w-full h-full rounded-full bg-gray-700' />
+          <img src={userDetails.profilepic} alt="prfile_img" className='w-full h-full rounded-full bg-gray-700 object-cover' />
         </NavLink>
         <button onClick={handleLogOut}>
           <MdOutlineLogout size={25} className='hover:text-purple-600' />
