@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       type: String, //cloudinary url
       default: "/images/default_profile.jpg",
     },
+    coverpic: {
+      type: String, //cloudinary url
+      default: "/images/default_cover.jpg",
+    },
     posts: [
       {
         type: mongoose.Schema.Types.ObjectId,

@@ -26,7 +26,7 @@ const AppHeader = () => {
   }
 
   return (
-    <nav className='max-w-[1536px] w-full mx-auto p-4 bg-_primary flex justify-between items-center'>
+    <nav className='max-w-[1536px] w-full mx-auto p-4 rounded-md bg-_primary flex justify-between items-center'>
       <div className='max-w-[110px] h-full'>
         <Link to='/home'>
           <img src="/images/LogoPostApp.png" alt="logo_postApp" className='w-full h-full' />
