@@ -2,13 +2,12 @@ import { asyncHandler, apiError, apiResponse } from "../utils/index.js";
 import { cookieOptions } from "../constants/constants.js";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
-import { generateAccessAndRefreshToken } from "../utils/tokenUtils.js"; // Assuming you have this function in a separate file
-
+import { generateAccessAndRefreshToken } from "../utils/tokenUtils.js";
 const verifyJWT = asyncHandler(async (req, res, next) => {
   const token =
     req.cookies?.accesstoken ||
     req.header("Authorization")?.replace("Bearer ", "");
-  const refreshToken = req.cookies?.refreshtoken; // Assuming you store the refresh token in a cookie
+  const refreshToken = req.cookies?.refreshtoken;
 
   if (!token) throw new apiError(401, "Unauthorized Request");
 

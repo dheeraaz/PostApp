@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useGlobalAppContext } from "../Context/AppContext";
 
 const appApi = axios.create({
     baseURL: 'http://localhost:3000/api/v1',
@@ -41,9 +40,9 @@ appApi.interceptors.response.use(function (response) {
 });
 
 export const isUserLoggedIn = async () => {
-    return appApi.get("/auth/isuserloggedin");
+    return appApi.get("/users/isuserloggedin");
 }
 
 export const logOut = async () => {
-    return appApi.post("/auth/logout", {});
+    return appApi.post("/users/logout", {});
 }
