@@ -65,3 +65,23 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/refreshtokens\",\"status\":\"200\",\"responseTime\":\"180.011\"}","timestamp":"2024-09-23T04:36:13.026Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"309.608\"}","timestamp":"2024-09-23T04:36:13.313Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"42.550\"}","timestamp":"2024-09-23T04:36:13.358Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"-\",\"responseTime\":\"-\"}","timestamp":"2024-09-23T05:19:17.199Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"50.327\"}","timestamp":"2024-09-23T05:19:17.554Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"51.422\"}","timestamp":"2024-09-23T05:19:17.613Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"PATCH\",\"url\":\"/api/v1/users/updateprofilepic\",\"status\":\"401\",\"responseTime\":\"4.164\"}","timestamp":"2024-09-23T05:28:16.951Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/refreshtokens\",\"status\":\"200\",\"responseTime\":\"114.062\"}","timestamp":"2024-09-23T05:28:17.080Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"PATCH\",\"url\":\"/api/v1/users/updateprofilepic\",\"status\":\"200\",\"responseTime\":\"3346.843\"}","timestamp":"2024-09-23T05:28:20.435Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Image deleted successfully from Cloudinary.","timestamp":"2024-09-23T05:28:20.994Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"PATCH\",\"url\":\"/api/v1/users/updatecoverpic\",\"status\":\"200\",\"responseTime\":\"2258.155\"}","timestamp":"2024-09-23T05:33:09.459Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"PATCH\",\"url\":\"/api/v1/users/updatecoverpic\",\"status\":\"200\",\"responseTime\":\"1135.785\"}","timestamp":"2024-09-23T05:33:14.225Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"47.593\"}","timestamp":"2024-09-23T05:33:29.596Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"47.410\"}","timestamp":"2024-09-23T05:33:29.646Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"PATCH\",\"url\":\"/api/v1/users/updatecoverpic\",\"status\":\"200\",\"responseTime\":\"2298.986\"}","timestamp":"2024-09-23T05:33:43.044Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Image deleted successfully from Cloudinary.","timestamp":"2024-09-23T05:33:43.345Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"61.019\"}","timestamp":"2024-09-23T05:35:41.775Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"49.261\"}","timestamp":"2024-09-23T05:35:41.827Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"PATCH\",\"url\":\"/api/v1/users/updatecoverpic\",\"status\":\"200\",\"responseTime\":\"2161.377\"}","timestamp":"2024-09-23T05:35:58.394Z"}
+{"level":"\u001b[31merror\u001b[39m","message":"Failed to delete image: not found","timestamp":"2024-09-23T05:35:58.608Z"}
+{"level":"\u001b[31merror\u001b[39m","message":"Failed to delete the image from Cloudinary.","timestamp":"2024-09-23T05:35:58.610Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"49.107\"}","timestamp":"2024-09-23T05:36:09.767Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"46.914\"}","timestamp":"2024-09-23T05:36:09.816Z"}
