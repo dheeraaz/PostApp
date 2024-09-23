@@ -12,7 +12,9 @@ import {
   resetPassword,
   isUserLoggedIn,
   refreshTokens,
+
   updateProfilePic,
+  updateCoverPic,
 } from "../controllers/user.controller.js";
 
 import { validateWithSchema } from "../middlewares/zod_validator.middleware.js";
@@ -45,5 +47,9 @@ router.route("/refreshtokens").post(refreshTokens);
 router
   .route("/updateprofilepic")
   .patch(verifyJWT, multerUpload.single("profilepic"), updateProfilePic);
+
+router
+  .route("/updatecoverpic")
+  .patch(verifyJWT, multerUpload.single("coverpic"), updateCoverPic);
 
 export default router;

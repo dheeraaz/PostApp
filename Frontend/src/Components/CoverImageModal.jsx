@@ -1,12 +1,15 @@
 import React, { useRef, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
 import { useGlobalAppContext } from '../Context/AppContext';
+import { toast } from 'react-toastify';
+import { uploadCoverPic } from '../Apis/appApi';
 
 const CoverImageModal = ({ setIsCoverModalOpen }) => {
-  const { userDetails } = useGlobalAppContext();
+  const { userDetails, setUserDetails } = useGlobalAppContext();
   const inputRef = useRef();
   const [imageError, setImageError] = useState(false);
   const [coverPic, setCoverPic] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleImageClick = () => {
     inputRef.current.click();
@@ -23,8 +26,27 @@ const CoverImageModal = ({ setIsCoverModalOpen }) => {
     setCoverPic(imgFile);
   }
 
-  const handleUpload = ()=>{
-      console.log(coverPic)
+  const handleUpload = async() => {
+    try {
+      setIsUploading(true);
+
+      const formData = new FormData();
+      formData.append('coverpic', coverPic);
+      formData.append('originalCoverUrl', userDetails.coverpic);
+
+      const response = await uploadCoverPic(formData);
+
+      if (response?.status === 200) {
+        setUserDetails(response?.data?.data);
+        toast.success(response?.data?.message);
+        setIsCoverModalOpen(false);
+      }
+
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message || "Error in uploading image")
+    } finally {
+      setIsUploading(false);
+    }
   }
 
   return (
@@ -39,10 +61,10 @@ const CoverImageModal = ({ setIsCoverModalOpen }) => {
           <div onClick={handleImageClick} className='w-full h-44 rounded-md cursor-pointer'>
 
             {
-            coverPic ? (<img src={URL.createObjectURL(coverPic)} alt="profile_img" className='w-full h-full rounded-md object-cover' />) : (<img src={userDetails.coverpic} alt="profile_img" className='w-full h-full rounded-md object-cover' />)}
+              coverPic ? (<img src={URL.createObjectURL(coverPic)} alt="profile_img" className='w-full h-full rounded-md object-cover' />) : (<img src={userDetails.coverpic} alt="profile_img" className='w-full h-full rounded-md object-cover' />)}
           </div>
           <input type="file" name="coverPic" ref={inputRef} onChange={handleImageChange} className='hidden' />
-          <button onClick={handleUpload} disabled={imageError || !coverPic} className={`px-4 py-2 rounded-md  ${(imageError || !coverPic)?"bg-gray-500 cursor-not-allowed":"bg-gradient-to-r from-blue-600  to-purple-600 hover:tracking-wider"}`}>Upload</button>
+          <button onClick={handleUpload} disabled={imageError || !coverPic || isUploading} className={`px-4 py-2 rounded-md  ${(imageError || !coverPic || isUploading) ? "bg-gray-500 cursor-not-allowed" : "bg-gradient-to-r from-blue-600  to-purple-600 hover:tracking-wider"}`}>{isUploading ? "Uploading..." : "Upload"}</button>
         </div>
         {imageError && <p className='text-center mt-4 font-_poppins text-red-500 text-sm'>Invalid Image Type</p>}
       </div>

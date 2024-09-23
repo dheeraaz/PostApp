@@ -474,8 +474,7 @@ const refreshTokens = asyncHandler(async (req, res) => {
   }
 });
 
-// for updating profile picture
-
+// For Updating Profile Picture
 const updateProfilePic = asyncHandler(async (req, res) => {
   // console.log(req.file);
   // console.log(req.body.originalProfileUrl);
@@ -493,9 +492,7 @@ const updateProfilePic = asyncHandler(async (req, res) => {
   if (req?.body?.originalProfileUrl !== "/images/default_profile.jpg") {
     deleteFromCloudinary(req?.body?.originalProfileUrl)
       .then(result => {
-        if (result) {
-          logger.info("Image deleted successfully from Cloudinary.");
-        } else {
+        if (!result) {
           logger.error("Failed to delete the image from Cloudinary.");
         }
       })
@@ -515,6 +512,44 @@ const updateProfilePic = asyncHandler(async (req, res) => {
     .json(new apiResponse(201, user, "Successfully Updated User's profile"));
 });
 
+// for updating cover photo
+const updateCoverPic = asyncHandler(async (req, res) => {
+  // console.log(req.file);
+  // console.log(req.body.originalCoverUrl);
+
+  const coverPicLocalPath = req?.file?.path;
+
+  if (!coverPicLocalPath)
+    throw new apiError(400, "Cover picture not uploaded");
+
+  const coverPic = await uploadOnCloudinary(coverPicLocalPath);
+  
+  if (!coverPic.url)
+    throw new apiError(500, "Image couldn't be uploaded at current moment");
+  
+  if (req?.body?.originalCoverUrl !== "/images/default_cover.jpg") {
+    deleteFromCloudinary(req?.body?.originalCoverUrl)
+      .then(result => {
+        if (!result) {
+          logger.error("Failed to delete the image from Cloudinary.");
+        }
+      })
+      .catch(error => {
+        logger.error("Error deleting image from Cloudinary", error);
+      });
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req?.user?._id,
+    { $set: { coverpic: coverPic.url } },
+    { new: true }
+  ).select("-password -refreshtoken");
+
+  res
+    .status(200)
+    .json(new apiResponse(201, user, "Successfully Updated User's Cover Image"));
+});
+
 export {
   isUserLoggedIn,
   registerUser,
@@ -524,5 +559,7 @@ export {
   forgotPassword,
   resetPassword,
   refreshTokens,
+
   updateProfilePic,
+  updateCoverPic,
 };

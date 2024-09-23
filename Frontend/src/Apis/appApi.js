@@ -54,3 +54,11 @@ export const uploadProfilePic = async (frontendData)=>{
           },
     })
 }
+
+export const uploadCoverPic = async (frontendData)=>{
+    return appApi.patch('/users/updatecoverpic', frontendData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+    })
+}
