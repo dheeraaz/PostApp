@@ -49,7 +49,7 @@ const ProfileImageModal = ({ setIsProfileModalOpen }) => {
   }
 
   return (
-    <div className='w-full min-h-screen backdrop-blur-[1px] absolute top-0 left-0 flex items-center justify-center overflow-hidden '>
+    <div className='w-full min-h-screen backdrop-blur-[1px] absolute top-0 left-0 flex items-center justify-center overflow-hidden z-20'>
       <div className='pb-6 w-[400px] max-w-[90%] mx-auto bg-_primary rounded-md relative'>
         <button onClick={() => setIsProfileModalOpen(false)} className='absolute top-3 right-3 rounded-full p-1 hover:bg-gray-600'><RxCross2 size={24} /></button>
         <div className='mt-10'>

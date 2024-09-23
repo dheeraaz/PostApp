@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useGlobalAppContext } from '../../Context/AppContext';
 import CreatePostModal from '../../Components/CreatePostModal.jsx';
 import CreatePostButton from '../../Components/CreatePostButton.jsx';
+import PostCard from '../../Components/PostCard.jsx';
 
 const Home = () => {
   const { userDetails } = useGlobalAppContext();
@@ -22,8 +23,12 @@ const Home = () => {
 
   return (
     <>
-      <CreatePostButton setIsModalOpen = {setIsModalOpen}/>
-      {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen}/>}
+      <CreatePostButton setIsModalOpen={setIsModalOpen}/>
+      {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen} />}
+
+      {/* posts */}
+      <PostCard />
+     
     </>
   )
 }

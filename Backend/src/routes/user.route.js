@@ -12,7 +12,6 @@ import {
   resetPassword,
   isUserLoggedIn,
   refreshTokens,
-
   updateProfilePic,
   updateCoverPic,
 } from "../controllers/user.controller.js";

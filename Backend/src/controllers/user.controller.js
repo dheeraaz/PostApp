@@ -485,18 +485,18 @@ const updateProfilePic = asyncHandler(async (req, res) => {
     throw new apiError(400, "Profile picture not uploaded");
 
   const profilePic = await uploadOnCloudinary(profilePicLocalPath);
-  
+
   if (!profilePic.url)
     throw new apiError(500, "Image couldn't be uploaded at current moment");
-  
+
   if (req?.body?.originalProfileUrl !== "/images/default_profile.jpg") {
     deleteFromCloudinary(req?.body?.originalProfileUrl)
-      .then(result => {
+      .then((result) => {
         if (!result) {
           logger.error("Failed to delete the image from Cloudinary.");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         logger.error("Error deleting image from Cloudinary", error);
       });
   }
@@ -519,22 +519,21 @@ const updateCoverPic = asyncHandler(async (req, res) => {
 
   const coverPicLocalPath = req?.file?.path;
 
-  if (!coverPicLocalPath)
-    throw new apiError(400, "Cover picture not uploaded");
+  if (!coverPicLocalPath) throw new apiError(400, "Cover picture not uploaded");
 
   const coverPic = await uploadOnCloudinary(coverPicLocalPath);
-  
+
   if (!coverPic.url)
     throw new apiError(500, "Image couldn't be uploaded at current moment");
-  
+
   if (req?.body?.originalCoverUrl !== "/images/default_cover.jpg") {
     deleteFromCloudinary(req?.body?.originalCoverUrl)
-      .then(result => {
+      .then((result) => {
         if (!result) {
           logger.error("Failed to delete the image from Cloudinary.");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         logger.error("Error deleting image from Cloudinary", error);
       });
   }
@@ -547,7 +546,9 @@ const updateCoverPic = asyncHandler(async (req, res) => {
 
   res
     .status(200)
-    .json(new apiResponse(201, user, "Successfully Updated User's Cover Image"));
+    .json(
+      new apiResponse(201, user, "Successfully Updated User's Cover Image")
+    );
 });
 
 export {
@@ -559,7 +560,6 @@ export {
   forgotPassword,
   resetPassword,
   refreshTokens,
-
   updateProfilePic,
   updateCoverPic,
 };

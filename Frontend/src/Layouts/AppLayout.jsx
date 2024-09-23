@@ -13,7 +13,7 @@ const AppLayout = () => {
 
   return (
     <main className='min-h-screen flex flex-col'>
-      <header className='mb-2 sticky top-0 left-0 right-0'>
+      <header className='mb-2 sticky top-0 left-0 right-0 z-10'>
         <AppHeader />
       </header>
       {/* <section className="w-full flex-grow border-2 border-red-500"> */}

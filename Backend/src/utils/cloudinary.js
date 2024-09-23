@@ -36,8 +36,8 @@ const uploadOnCloudinary = async (localFilePath) => {
 const extractPublicIdFromUrl = (imageUrl) => {
   const urlParts = imageUrl.split("/");
   // The public_id is the last part of the URL (before the extension)
-  const publicIdWithExtension = urlParts[urlParts.length - 1]; // e.g., "v1631026197.jpg"
-  const publicId = publicIdWithExtension.split(".")[0]; // remove extension, e.g., "v1631026197"
+  const publicIdWithExtension = urlParts[urlParts.length - 1]; // e.g., "z83zw3dgvazincpfhxns.jpg"
+  const publicId = publicIdWithExtension.split(".")[0]; // remove extension, e.g., "z83zw3dgvazincpfhxns"
 
   return publicId;
 };

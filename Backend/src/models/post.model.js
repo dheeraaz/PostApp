@@ -9,14 +9,15 @@ const postSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: true,
     },
-    postimg: {
-      type: String, //cloudinary url
-    },
+    postimgs: [
+      {
+        type: String, //cloudinary url
+      },
+    ],
     theme: {
       type: String,
-      default: "#4a86d4",
+      default: "#f2f2f2",
     },
     likedby: [
       {
