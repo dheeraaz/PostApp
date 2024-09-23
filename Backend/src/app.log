@@ -59,3 +59,9 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/auth/login\",\"status\":\"200\",\"responseTime\":\"507.000\"}","timestamp":"2024-09-19T09:42:22.483Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/auth/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.410\"}","timestamp":"2024-09-19T09:42:33.152Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/auth/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"0.319\"}","timestamp":"2024-09-19T09:42:33.154Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"5.338\"}","timestamp":"2024-09-23T04:36:12.710Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"1.304\"}","timestamp":"2024-09-23T04:36:12.716Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/refreshtokens\",\"status\":\"200\",\"responseTime\":\"158.708\"}","timestamp":"2024-09-23T04:36:12.995Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/refreshtokens\",\"status\":\"200\",\"responseTime\":\"180.011\"}","timestamp":"2024-09-23T04:36:13.026Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"309.608\"}","timestamp":"2024-09-23T04:36:13.313Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"42.550\"}","timestamp":"2024-09-23T04:36:13.358Z"}

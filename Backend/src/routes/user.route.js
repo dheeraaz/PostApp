@@ -2,6 +2,7 @@ import { Router } from "express";
 
 //importing middleware and controllers
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { multerUpload } from "../middlewares/multer.middleware.js";
 import {
   registerUser,
   loginUser,
@@ -11,6 +12,7 @@ import {
   resetPassword,
   isUserLoggedIn,
   refreshTokens,
+  updateProfilePic,
 } from "../controllers/user.controller.js";
 
 import { validateWithSchema } from "../middlewares/zod_validator.middleware.js";
@@ -39,5 +41,9 @@ router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/isuserloggedin").get(verifyJWT, isUserLoggedIn);
 
 router.route("/refreshtokens").post(refreshTokens);
+
+router
+  .route("/updateprofilepic")
+  .patch(verifyJWT, multerUpload.single("profilepic"), updateProfilePic);
 
 export default router;

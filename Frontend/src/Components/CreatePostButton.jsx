@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useGlobalAppContext } from '../Context/AppContext';
 
 const CreatePostButton = ({setIsModalOpen}) => {
@@ -10,9 +10,9 @@ const CreatePostButton = ({setIsModalOpen}) => {
         <div className='flex gap-2'>
           <Link
             to='/home/profile'
-            className='inline-block max-w-10 max-h-10 rounded-full'
+            className='w-10 h-10 min-h-[40px] min-w-[40px] rounded-full'
           >
-            <img src={userDetails.profilepic} alt="prfile_img" className='w-full h-full rounded-full bg-gray-700' />
+            <img src={userDetails.profilepic} alt="prfile_img" className='w-full h-full rounded-full bg-gray-700 object-cover aspect-square' />
           </Link>
           <button onClick={()=>setIsModalOpen(true)} className='bg-gray-600 w-full p-2 rounded-full text-gray-400 text-left pl-4 hover:bg-gray-500'>
             What's on your mind, {userDetails.username.split(" ")[0]}?
