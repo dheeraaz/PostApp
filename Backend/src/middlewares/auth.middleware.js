@@ -8,7 +8,13 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
     req.header("Authorization")?.replace("Bearer ", "");
 
   // checking if there is token or not
-  if (!token) throw new apiError(401, "Unauthorized Requestt", "", "AccessTokenNotAvailable");
+  if (!token)
+    throw new apiError(
+      401,
+      "Unauthorized Requestt",
+      "",
+      "AccessTokenNotAvailable"
+    );
 
   try {
     // this line  will throw a TokenExpiredError if the token has expired and nothing is assigned to decodedToken
@@ -29,12 +35,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       //here token has expired, so proceed to take necessary action
-      throw new apiError(
-        401,
-        "Unauthorized Request",
-        "",
-        "AccessTokenExpired"
-      );
+      throw new apiError(401, "Unauthorized Request", "", "AccessTokenExpired");
     } else {
       throw new apiError(
         error?.statusCode || 500,

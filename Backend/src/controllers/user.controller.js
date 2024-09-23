@@ -6,6 +6,8 @@ import {
   apiError,
   apiResponse,
   sendEmail,
+  uploadOnCloudinary,
+  deleteFromCloudinary,
 } from "../utils/index.js";
 import {
   otpEmailBody,
@@ -437,25 +439,32 @@ const refreshTokens = asyncHandler(async (req, res) => {
     if (!user) throw new apiError(404, "User not found");
 
     // this will generate both access token and refresh token, updates refreshtoken in database and also handles the error
-    const { refreshtoken, accesstoken } = await generateAccessAndRefreshToken(user._id);
-    console.log("refreesh",refreshtoken)
-    console.log("access",accesstoken)
+    const { refreshtoken, accesstoken } = await generateAccessAndRefreshToken(
+      user._id
+    );
+    console.log("refreesh", refreshtoken);
+    console.log("access", accesstoken);
 
     res
       .status(200)
       .cookie("accesstoken", accesstoken, cookieOptions)
       .cookie("refreshtoken", refreshtoken, cookieOptions)
-      .json(new apiResponse(200, {}, "Successfully refreshed the access token"));
-
+      .json(
+        new apiResponse(200, {}, "Successfully refreshed the access token")
+      );
   } catch (error) {
     if (error.name === "TokenExpiredError") {
       // Clear cookies if refresh token has expired
       res.clearCookie("accesstoken", cookieOptions);
       res.clearCookie("refreshtoken", cookieOptions);
-      
 
       // Inform the frontend to log the user out
-      throw new apiError(401, `Session Expired \nPlease Login Again`, "", "SessionExpired");
+      throw new apiError(
+        401,
+        `Session Expired \nPlease Login Again`,
+        "",
+        "SessionExpired"
+      );
     } else {
       throw new apiError(
         error?.statusCode || 401,
@@ -465,6 +474,46 @@ const refreshTokens = asyncHandler(async (req, res) => {
   }
 });
 
+// for updating profile picture
+
+const updateProfilePic = asyncHandler(async (req, res) => {
+  // console.log(req.file);
+  // console.log(req.body.originalProfileUrl);
+
+  const profilePicLocalPath = req?.file?.path;
+
+  if (!profilePicLocalPath)
+    throw new apiError(400, "Profile picture not uploaded");
+
+  const profilePic = await uploadOnCloudinary(profilePicLocalPath);
+  
+  if (!profilePic.url)
+    throw new apiError(500, "Image couldn't be uploaded at current moment");
+  
+  if (req?.body?.originalProfileUrl !== "/images/default_profile.jpg") {
+    deleteFromCloudinary(req?.body?.originalProfileUrl)
+      .then(result => {
+        if (result) {
+          logger.info("Image deleted successfully from Cloudinary.");
+        } else {
+          logger.error("Failed to delete the image from Cloudinary.");
+        }
+      })
+      .catch(error => {
+        logger.error("Error deleting image from Cloudinary", error);
+      });
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req?.user?._id,
+    { $set: { profilepic: profilePic.url } },
+    { new: true }
+  ).select("-password -refreshtoken");
+
+  res
+    .status(200)
+    .json(new apiResponse(201, user, "Successfully Updated User's profile"));
+});
 
 export {
   isUserLoggedIn,
@@ -475,4 +524,5 @@ export {
   forgotPassword,
   resetPassword,
   refreshTokens,
+  updateProfilePic,
 };

@@ -46,3 +46,11 @@ export const isUserLoggedIn = async () => {
 export const logOut = async () => {
     return appApi.post("/users/logout", {});
 }
+
+export const uploadProfilePic = async (frontendData)=>{
+    return appApi.patch('/users/updateprofilepic', frontendData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+    })
+}
