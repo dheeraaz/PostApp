@@ -1,8 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { format } from "date-fns"
-import Carousel from './Sub-Components/Carousel.jsx';
+import Carousel from '../Sub-Components/Carousel.jsx';
 import { BsHeart, BsHeartFill, BsHeartbreak, BsHeartbreakFill } from "react-icons/bs";
+import { useGlobalAppContext } from '../../Context/AppContext.jsx';
+import parse from 'html-react-parser';
+import './PostCard.scss' 
+
 {/* <BsHeart /> */ }
 {/* <BsHeartFill /> */ }
 {/* <BsHeartbreak /> */ }
@@ -27,6 +31,8 @@ const post = {
 }
 
 const PostCard = () => {
+    const { editorContent } = useGlobalAppContext();
+
     return (
         <div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-4 mt-2'>
             <div className='flex gap-2 items-center'>
@@ -43,31 +49,32 @@ const PostCard = () => {
                 </div>
             </div>
 
-            <div className='mt-1'>
-                <p>{post.content}</p>
+            <div className='mt-1 _post-Content'>
+                {/* <p>{post.content}</p> */}
+                {parse(editorContent)}
             </div>
             {/* <hr className='mt-4 border-gray-500 h-[1px]' /> */}
 
             <div className='mt-2 w-full flex gap-2 flex-wrap'>
-                <p className={`w-fit px-2 py-1 rounded-full ${post.theme === '#f2f2f2' ? 'text-black' : 'text-white'}`} style={{backgroundColor: post.theme}}>#insta</p>
-                <p className={`w-fit px-2 py-1 rounded-full ${post.theme === '#f2f2f2' ? 'text-black' : 'text-white'}`} style={{backgroundColor: post.theme}}>#stories</p>
-                <p className={`w-fit px-2 py-1 rounded-full ${post.theme === '#f2f2f2' ? 'text-black' : 'text-white'}`} style={{backgroundColor: post.theme}}>#viral</p>
+                <p className={`w-fit px-2 py-1 rounded-full ${post.theme === '#f2f2f2' ? 'text-black' : 'text-white'}`} style={{ backgroundColor: post.theme }}>#insta</p>
+                <p className={`w-fit px-2 py-1 rounded-full ${post.theme === '#f2f2f2' ? 'text-black' : 'text-white'}`} style={{ backgroundColor: post.theme }}>#stories</p>
+                <p className={`w-fit px-2 py-1 rounded-full ${post.theme === '#f2f2f2' ? 'text-black' : 'text-white'}`} style={{ backgroundColor: post.theme }}>#viral</p>
             </div>
 
-            {post?.postimgs?.length > 0 && <div 
-            className='mt-2 border-[1px] rounded-md w-full max-h-[500px] h-[500px] px-4 flex items-center justify-center'
-            style={{ borderColor: post.theme }}
+            {post?.postimgs?.length > 0 && <div
+                className='mt-2 border-[1px] rounded-md w-full max-h-[500px] h-[500px] px-4 flex items-center justify-center'
+                style={{ borderColor: post.theme }}
             >
                 <Carousel slides={post.postimgs} />
             </div>}
 
             <div className='border-y-[1px] border-gray-500 mt-2 flex items-center justify-between gap-1 py-1'>
                 <button className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
-                    <BsHeart size={20} style={{ color: post.theme }}/>
+                    <BsHeart size={20} style={{ color: post.theme }} />
                     <p>Like</p>
                 </button>
                 <button className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
-                    <BsHeartbreak size={20} style={{ color: post.theme }}/>
+                    <BsHeartbreak size={20} style={{ color: post.theme }} />
                     <p>Dislike</p>
                 </button>
             </div>

@@ -1,0 +1,108 @@
+/* Basic editor styles */
+.tiptap {
+  @apply border-2 outline-none border-gray-400 px-2 py-4 focus-within:border-blue-500 min-h-20 max-h-[300px] overflow-y-auto rounded-md;
+  scrollbar-width: thin;
+  scrollbar-color: gray transparent;
+  /* List styles */
+  /* Heading styles */
+  /* Code and preformatted text styles */
+}
+.tiptap p {
+  @apply text-justify;
+}
+.tiptap ul {
+  list-style-type: disc;
+}
+.tiptap ol {
+  list-style-type: number;
+}
+.tiptap ul,
+.tiptap ol {
+  padding: 0 1rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+}
+.tiptap ul li p,
+.tiptap ol li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4 {
+  line-height: 1.1;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.tiptap h1,
+.tiptap h2 {
+  margin-bottom: 1rem;
+}
+.tiptap h1 {
+  font-size: 1.6rem;
+}
+.tiptap h2 {
+  font-size: 1.4rem;
+}
+.tiptap h3 {
+  font-size: 1.2rem;
+}
+.tiptap h4 {
+  font-size: 1.1rem;
+}
+.tiptap code {
+  background-color: #6b7280;
+  border-radius: 0.4rem;
+  color: white;
+  font-size: 0.85rem;
+  padding: 0.25em 0.3em;
+}
+.tiptap pre {
+  background: #4b5563;
+  border-radius: 0.5rem;
+  color: white;
+  font-family: "JetBrainsMono", monospace;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+}
+.tiptap pre code {
+  background: none;
+  color: inherit;
+  font-size: 0.8rem;
+  padding: 0;
+}
+.tiptap blockquote {
+  border-left: 3px solid blue;
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+}
+.tiptap mark {
+  background-color: #faf594;
+  border-radius: 0.4rem;
+  -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
+  padding: 0.1rem 0.3rem;
+}
+.tiptap hr {
+  border: none;
+  border-top: 1px solid gray;
+  margin: 1rem 0;
+}
+.tiptap mark {
+  background-color: #faf594;
+  border-radius: 0.4rem;
+  -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
+  padding: 0.1rem 0.3rem;
+}
+
+._button-group {
+  @apply flex items-stretch gap-2 flex-wrap;
+}
+._button-group button {
+  @apply py-1 px-2 rounded-sm bg-gray-400;
+}
+._button-group .is-active {
+  @apply bg-blue-500;
+}/*# sourceMappingURL=Tiptap.css.map */

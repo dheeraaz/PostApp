@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useGlobalAppContext } from '../../Context/AppContext';
 import CreatePostModal from '../../Components/CreatePostModal.jsx';
 import CreatePostButton from '../../Components/CreatePostButton.jsx';
-import PostCard from '../../Components/PostCard.jsx';
+import PostCard from '../../Components/Post-Card/PostCard.jsx';
 
 const Home = () => {
   const { userDetails } = useGlobalAppContext();
