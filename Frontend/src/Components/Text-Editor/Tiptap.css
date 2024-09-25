@@ -1,6 +1,6 @@
 /* Basic editor styles */
 .tiptap {
-  @apply border-2 outline-none border-gray-400 px-2 py-4 focus-within:border-blue-500 min-h-20 max-h-[300px] overflow-y-auto rounded-md;
+  @apply border-2 outline-none border-gray-400 px-2 py-4 focus-within:border-blue-500 min-h-28 max-h-[300px] overflow-y-auto rounded-md;
   scrollbar-width: thin;
   scrollbar-color: gray transparent;
   /* List styles */
