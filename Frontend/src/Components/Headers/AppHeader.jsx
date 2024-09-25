@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { MdOutlineLogout } from "react-icons/md";
-import { useGlobalAppContext } from '../Context/AppContext';
+import { useGlobalAppContext } from '../../Context/AppContext.jsx';
 
-import { logOut } from '../Apis/appApi.js';
+import { logOut } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 
 const AppHeader = () => {

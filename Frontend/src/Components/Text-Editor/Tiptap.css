@@ -6,6 +6,7 @@
   /* List styles */
   /* Heading styles */
   /* Code and preformatted text styles */
+  /* Placeholder (at the top) */
 }
 .tiptap p {
   @apply text-justify;
@@ -19,7 +20,7 @@
 .tiptap ul,
 .tiptap ol {
   padding: 0 1rem;
-  margin: 1.25rem 1rem 1.25rem 0.4rem;
+  margin: 1rem 1rem 1rem 0.4rem;
 }
 .tiptap ul li p,
 .tiptap ol li p {
@@ -95,6 +96,13 @@
   -webkit-box-decoration-break: clone;
           box-decoration-break: clone;
   padding: 0.1rem 0.3rem;
+}
+.tiptap p.is-editor-empty:first-child::before {
+  color: #6b7280;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 
 ._button-group {

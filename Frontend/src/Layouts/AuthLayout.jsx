@@ -2,7 +2,7 @@ import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useGlobalAppContext } from '../Context/AppContext'
-import AuthHeader from '../Components/AuthHeader.jsx'
+import AuthHeader from '../Components/Headers/AuthHeader'
 
 const AuthLayout = () => {
   const { isLoggedIn, isAppLoading } = useGlobalAppContext();

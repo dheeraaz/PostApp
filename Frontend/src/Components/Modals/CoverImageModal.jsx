@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
-import { useGlobalAppContext } from '../Context/AppContext';
+import { useGlobalAppContext } from '../../Context/AppContext';
 import { toast } from 'react-toastify';
-import { uploadCoverPic } from '../Apis/appApi';
+import { uploadCoverPic } from '../../Apis/appApi';
 
 const CoverImageModal = ({ setIsCoverModalOpen }) => {
   const { userDetails, setUserDetails } = useGlobalAppContext();
@@ -63,7 +63,7 @@ const CoverImageModal = ({ setIsCoverModalOpen }) => {
             {
               coverPic ? (<img src={URL.createObjectURL(coverPic)} alt="profile_img" className='w-full h-full rounded-md object-cover' />) : (<img src={userDetails.coverpic} alt="profile_img" className='w-full h-full rounded-md object-cover' />)}
           </div>
-          <input type="file" name="coverPic" ref={inputRef} onChange={handleImageChange} className='hidden' />
+          <input type="file" name="coverPic" ref={inputRef} accept="image/*" onChange={handleImageChange} className='hidden' />
           <button onClick={handleUpload} disabled={imageError || !coverPic || isUploading} className={`px-4 py-2 rounded-md  ${(imageError || !coverPic || isUploading) ? "bg-gray-500 cursor-not-allowed" : "bg-gradient-to-r from-blue-600  to-purple-600 hover:tracking-wider"}`}>{isUploading ? "Uploading..." : "Upload"}</button>
         </div>
         {imageError && <p className='text-center mt-4 font-_poppins text-red-500 text-sm'>Invalid Image Type</p>}

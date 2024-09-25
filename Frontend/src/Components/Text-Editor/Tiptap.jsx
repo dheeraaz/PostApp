@@ -1,4 +1,4 @@
-import './Tiptap.scss'
+import './Tiptap.css'
 
 import { FaBold, FaItalic, FaUnderline } from "react-icons/fa6";
 import { RxStrikethrough } from "react-icons/rx";
@@ -10,17 +10,16 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Highlight from '@tiptap/extension-highlight'
+import Placeholder from '@tiptap/extension-placeholder'
 
-import { useGlobalAppContext } from '../../Context/AppContext';
 
 // define your extension array
-const extensions = [StarterKit, Underline, Highlight.configure({ multicolor: true })]
+const extensions = [StarterKit, Underline, Highlight.configure({ multicolor: true }),  Placeholder.configure({ placeholder: 'Write Your Post Content...',})]
 
 // const content = `<p>Hello</p>`
 const content = ``
 
-const Tiptap = ({ setEditorInstance }) => {
-    const { setEditorContent } = useGlobalAppContext(); //saving editor content in global app context
+const Tiptap = ({ setEditorContent }) => {
 
     const editor = useEditor({
         extensions,

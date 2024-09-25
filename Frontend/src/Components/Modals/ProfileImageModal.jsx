@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
-import { useGlobalAppContext } from '../Context/AppContext';
-import { uploadProfilePic } from '../Apis/appApi.js';
+import { useGlobalAppContext } from '../../Context/AppContext.jsx';
+import { uploadProfilePic } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 
 const ProfileImageModal = ({ setIsProfileModalOpen }) => {
@@ -62,7 +62,7 @@ const ProfileImageModal = ({ setIsProfileModalOpen }) => {
             {
               profilePic ? (<img src={URL.createObjectURL(profilePic)} alt="profile_img" className='w-full h-full rounded-full object-cover' />) : (<img src={userDetails.profilepic} alt="profile_img" className='w-full h-full rounded-full object-cover' />)}
           </div>
-          <input type="file" name="profilepic" ref={inputRef} onChange={handleImageChange} className='hidden' />
+          <input type="file" name="profilepic" ref={inputRef} accept="image/*" onChange={handleImageChange} className='hidden' />
           <button onClick={handleUpload} disabled={imageError || !profilePic || isUploading} className={`px-4 py-2 rounded-md  ${(imageError || !profilePic || isUploading) ? "bg-gray-500 cursor-not-allowed" : "bg-gradient-to-r from-blue-600  to-purple-600 hover:tracking-wider"}`}>{isUploading ? "Uploading": "Upload"}</button>
         </div>
         {imageError && <p className='text-center mt-4 font-_poppins text-red-500 text-sm'>Invalid Image Type</p>}

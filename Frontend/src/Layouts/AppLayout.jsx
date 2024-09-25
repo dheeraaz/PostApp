@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useGlobalAppContext } from '../Context/AppContext'
-import AppHeader from '../Components/AppHeader'
+import AppHeader from '../Components/Headers/AppHeader.jsx'
 
 const AppLayout = () => {
 

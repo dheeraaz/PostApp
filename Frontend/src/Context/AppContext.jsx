@@ -9,9 +9,6 @@ export const AppContextProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAppLoading, setIsAppLoading] = useState(true);
 
-    // Tiptap editor content, for lifting state up
-    const [editorContent, setEditorContent] = useState("");
-
     useEffect(() => {
         ; (async () => {
             try {
@@ -38,7 +35,7 @@ export const AppContextProvider = ({ children }) => {
         })()
     },[])
 
-    return <AppContext.Provider value={{ userDetails, setUserDetails, isLoggedIn, setIsLoggedIn, isAppLoading, editorContent, setEditorContent }}>
+    return <AppContext.Provider value={{ userDetails, setUserDetails, isLoggedIn, setIsLoggedIn, isAppLoading }}>
         {children}
     </AppContext.Provider>
 }
