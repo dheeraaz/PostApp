@@ -1,16 +1,19 @@
-import React, { useEffect, useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
+import React, { useEffect, useRef, useState } from 'react'
 import { MdDeleteForever } from "react-icons/md";
 
-
 const MultipleImgUpload = ({ setPostError, postImages, setPostImages }) => {
+    const inputRef = useRef();
     const [tempPostImages, setTempPostImages] = useState([]);
     const maximumImgCount = 6;
 
-    const onDrop = useCallback(acceptedFiles => {
-        setTempPostImages([...acceptedFiles]);
-    }, [])
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+    const handleImgClick = () => {
+        inputRef.current.click();
+    }
+
+    const handleChange = (e) => {
+        const imgFiles = e.target.files;
+        setTempPostImages([...imgFiles]);
+    }
 
     const handleImgDelete = (index) => {
         // we cannot directly update state
@@ -48,16 +51,10 @@ const MultipleImgUpload = ({ setPostError, postImages, setPostImages }) => {
 
     return (
         <div className=''>
-            <div {...getRootProps()} className=' cursor-pointer border-2 border-dashed border-gray-400 w-full h-20 rounded-md flex items-center justify-center'>
-                <input {...getInputProps()} />
-                {
-                    isDragActive ?
-                        <p className=' font-_poppins text-gray-400 text-xl'>Drop the files here ...</p> : <div className=' text-center'>
-                            <p className=' font-_poppins text-gray-400 text-xl'>Drag and Drop Images or, Browse</p>
-                            <p className=' font-_poppins text-sm text-gray-500'>(Upto {maximumImgCount} Images)</p>
-                        </div>
-                }
+            <div onClick={handleImgClick} className=' cursor-pointer border-2 border-gray-400 w-full h-20 rounded-md flex items-center justify-center'>
+                <p className=' font-_poppins text-gray-400 text-xl'>+ Add Images <span className='text-sm text-gray-500'>(Upto {maximumImgCount} Images)</span></p>
             </div>
+            <input ref={inputRef} onChange={handleChange} accept="image/*" type="file" name="" id="" multiple hidden />
 
             {postImages.length > 0 && <div className='w-full py-1 flex gap-2 flex-wrap'>
                 {

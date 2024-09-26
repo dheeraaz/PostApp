@@ -5,6 +5,10 @@ import { RxStrikethrough } from "react-icons/rx";
 import { ImParagraphLeft } from "react-icons/im";
 import { MdFormatListBulleted } from "react-icons/md";
 import { GoListOrdered } from "react-icons/go";
+import { PiCodeBlockBold } from "react-icons/pi";
+import { FaCode } from "react-icons/fa";
+import { IoMdUndo, IoMdRedo } from "react-icons/io";
+
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -143,21 +147,14 @@ const Tiptap = ({ setEditorContent }) => {
                     }
                     className={editor.isActive('code') ? 'is-active' : ''}
                 >
-                    Code
+                    <FaCode size={20}/>
                 </button>
 
                 <button
                     onClick={() => editor.chain().focus().toggleCodeBlock().run()}
                     className={editor.isActive('codeBlock') ? 'is-active' : ''}
                 >
-                    Code Block
-                </button>
-
-                <button
-                    onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                    className={editor.isActive('blockquote') ? 'is-active' : ''}
-                >
-                    Blockquote
+                    <PiCodeBlockBold size={20} />
                 </button>
 
                 <button
@@ -196,7 +193,7 @@ const Tiptap = ({ setEditorContent }) => {
                             .run()
                     }
                 >
-                    Undo
+                    <IoMdUndo />
                 </button>
                 <button
                     onClick={() => editor.chain().focus().redo().run()}
@@ -208,7 +205,7 @@ const Tiptap = ({ setEditorContent }) => {
                             .run()
                     }
                 >
-                    Redo
+                    <IoMdRedo />
                 </button>
 
             </div>
