@@ -37,17 +37,6 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-const limit = pLimit(maximumImagecount)
-// function to upload multiple images
-const uploadMultipleOnCloudinary = (fileArrayLocalPath) => {
-  return fileArrayLocalPath.map((image) => {
-    return limit(async () => {
-      const result = await cloudinary.uploader.upload(image);
-      return result;
-    });
-  });
-};
-
 const extractPublicIdFromUrl = (imageUrl) => {
   const urlParts = imageUrl.split("/");
   // The public_id is the last part of the URL (before the extension)
@@ -75,4 +64,28 @@ const deleteFromCloudinary = async (imageUrl) => {
   }
 };
 
-export { uploadOnCloudinary, deleteFromCloudinary, uploadMultipleOnCloudinary };
+
+const limit = pLimit(maximumImagecount)
+// function to upload multiple images
+const uploadMultipleOnCloudinary = (fileArrayLocalPath) => {
+  return fileArrayLocalPath.map((image) => {
+    return limit(async () => {
+      const result = await cloudinary.uploader.upload(image);
+      return result;
+    });
+  });
+};
+
+// deleting multiple images from cloudinary
+const deleteMultipleFromClodinary = async (ArrayOfPublicIdOfImages)=>{
+    try {
+      const result = await cloudinary.api.delete_resources(ArrayOfPublicIdOfImages);
+      
+      return result;
+    } catch (error) {
+      logger.error("Error in deleting image from Cloudinary", error);
+      return null;
+    }
+}
+
+export { uploadOnCloudinary, deleteFromCloudinary, uploadMultipleOnCloudinary, deleteMultipleFromClodinary };

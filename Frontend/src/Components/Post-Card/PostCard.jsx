@@ -8,6 +8,8 @@ import { MdDeleteOutline } from "react-icons/md";
 import parse from 'html-react-parser';
 import './PostCard.css'
 import { useGlobalAppContext } from '../../Context/AppContext.jsx';
+import { deletePost } from '../../Apis/appApi.js';
+import { toast } from 'react-toastify';
 
 {/* <BsHeart /> */ }
 {/* <BsHeartFill /> */ }
@@ -16,10 +18,19 @@ import { useGlobalAppContext } from '../../Context/AppContext.jsx';
 
 
 const PostCard = ({ post }) => {
-    const { userDetails } = useGlobalAppContext();
+    const { userDetails, getAllPostsFunction } = useGlobalAppContext();
 
     const deletePostFunction = async (id) => {
-        console.log("Post deleted", id);
+        try {
+            const response = await deletePost(id)
+            if (response?.status === 200) {
+                toast.success(response?.data?.message)
+                getAllPostsFunction();
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
+        }
     }
 
     return (
