@@ -8,6 +8,7 @@ import morgan from "morgan";
 // Routes Import
 import homeRouter from "./routes/home.route.js";
 import userRouter from "./routes/user.route.js";
+import postRouter from './routes/post.route.js';
 
 const app = express();
 
@@ -48,5 +49,6 @@ app.use(
 // Routes Declaration
 app.use("/", homeRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/posts", postRouter);
 
 export { app };

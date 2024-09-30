@@ -44,7 +44,7 @@ const ProfileImageModal = ({ setIsProfileModalOpen }) => {
     } catch (error) {
       toast.error(error?.response?.data?.message || error?.message || "Error in uploading image")
     } finally{
-      setIsUploading(true)
+      setIsUploading(false)
     }
   }
 

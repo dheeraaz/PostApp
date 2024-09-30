@@ -20,6 +20,10 @@ const Home = () => {
     };
   }, [isModalOpen]);
 
+  useEffect(()=>{
+    console.log("check")
+  },[])
+
 
   return (
     <>

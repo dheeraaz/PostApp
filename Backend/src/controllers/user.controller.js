@@ -442,8 +442,6 @@ const refreshTokens = asyncHandler(async (req, res) => {
     const { refreshtoken, accesstoken } = await generateAccessAndRefreshToken(
       user._id
     );
-    console.log("refreesh", refreshtoken);
-    console.log("access", accesstoken);
 
     res
       .status(200)
@@ -474,42 +472,43 @@ const refreshTokens = asyncHandler(async (req, res) => {
   }
 });
 
+
 // For Updating Profile Picture
 const updateProfilePic = asyncHandler(async (req, res) => {
   // console.log(req.file);
   // console.log(req.body.originalProfileUrl);
-
-  const profilePicLocalPath = req?.file?.path;
-
-  if (!profilePicLocalPath)
-    throw new apiError(400, "Profile picture not uploaded");
-
-  const profilePic = await uploadOnCloudinary(profilePicLocalPath);
-
-  if (!profilePic.url)
-    throw new apiError(500, "Image couldn't be uploaded at current moment");
-
-  if (req?.body?.originalProfileUrl !== "/images/default_profile.jpg") {
-    deleteFromCloudinary(req?.body?.originalProfileUrl)
-      .then((result) => {
-        if (!result) {
-          logger.error("Failed to delete the image from Cloudinary.");
-        }
-      })
-      .catch((error) => {
-        logger.error("Error deleting image from Cloudinary", error);
-      });
-  }
-
-  const user = await User.findByIdAndUpdate(
-    req?.user?._id,
-    { $set: { profilepic: profilePic.url } },
-    { new: true }
-  ).select("-password -refreshtoken");
-
-  res
-    .status(200)
-    .json(new apiResponse(201, user, "Successfully Updated User's profile"));
+ 
+    const profilePicLocalPath = req?.file?.path;
+  
+    if (!profilePicLocalPath)
+      throw new apiError(400, "Profile picture not uploaded");
+  
+    const profilePic = await uploadOnCloudinary(profilePicLocalPath);
+  
+    if (!profilePic.secure_url)
+      throw new apiError(500, "Image couldn't be uploaded at current moment");
+  
+    if (req?.body?.originalProfileUrl !== "/images/default_profile.jpg") {
+      deleteFromCloudinary(req?.body?.originalProfileUrl)
+        .then((result) => {
+          if (!result) {
+            logger.error("Failed to delete the image from Cloudinary.");
+          }
+        })
+        .catch((error) => {
+          logger.error("Error deleting image from Cloudinary", error);
+        });
+    }
+  
+    const user = await User.findByIdAndUpdate(
+      req?.user?._id,
+      { $set: { profilepic: profilePic.secure_url } },
+      { new: true }
+    ).select("-password -refreshtoken");
+  
+    res
+      .status(200)
+      .json(new apiResponse(201, user, "Successfully Updated User's profile"));
 });
 
 // for updating cover photo
@@ -523,7 +522,7 @@ const updateCoverPic = asyncHandler(async (req, res) => {
 
   const coverPic = await uploadOnCloudinary(coverPicLocalPath);
 
-  if (!coverPic.url)
+  if (!coverPic.secure_url)
     throw new apiError(500, "Image couldn't be uploaded at current moment");
 
   if (req?.body?.originalCoverUrl !== "/images/default_cover.jpg") {
@@ -540,7 +539,7 @@ const updateCoverPic = asyncHandler(async (req, res) => {
 
   const user = await User.findByIdAndUpdate(
     req?.user?._id,
-    { $set: { coverpic: coverPic.url } },
+    { $set: { coverpic: coverPic.secure_url } },
     { new: true }
   ).select("-password -refreshtoken");
 

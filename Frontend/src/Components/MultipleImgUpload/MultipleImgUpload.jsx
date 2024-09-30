@@ -10,7 +10,12 @@ const MultipleImgUpload = ({ setPostError, postImages, setPostImages }) => {
     const onDrop = useCallback(acceptedFiles => {
         setTempPostImages([...acceptedFiles]);
     }, [])
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: {
+            'image/*': ['.jpeg', '.jpg', '.png'],
+        },
+    })
 
     const handleImgDelete = (index) => {
         // we cannot directly update state

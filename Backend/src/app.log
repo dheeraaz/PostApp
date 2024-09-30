@@ -83,3 +83,11 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/refreshtokens\",\"status\":\"200\",\"responseTime\":\"89.347\"}","timestamp":"2024-09-25T08:30:25.998Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"42.879\"}","timestamp":"2024-09-25T08:30:26.043Z"}
 {"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"43.401\"}","timestamp":"2024-09-25T08:30:26.089Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"6.135\"}","timestamp":"2024-09-30T04:50:35.620Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"401\",\"responseTime\":\"1.454\"}","timestamp":"2024-09-30T04:50:35.625Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/refreshtokens\",\"status\":\"200\",\"responseTime\":\"94.851\"}","timestamp":"2024-09-30T04:50:35.870Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"POST\",\"url\":\"/api/v1/users/refreshtokens\",\"status\":\"200\",\"responseTime\":\"110.590\"}","timestamp":"2024-09-30T04:50:35.877Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"200\",\"responseTime\":\"44.437\"}","timestamp":"2024-09-30T04:50:35.924Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"45.726\"}","timestamp":"2024-09-30T04:50:35.972Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"48.286\"}","timestamp":"2024-09-30T04:54:53.129Z"}
+{"level":"\u001b[32minfo\u001b[39m","message":"{\"method\":\"GET\",\"url\":\"/api/v1/users/isuserloggedin\",\"status\":\"304\",\"responseTime\":\"48.074\"}","timestamp":"2024-09-30T04:54:53.181Z"}
