@@ -4,13 +4,13 @@ import CreatePostModal from '../../Components/Modals/CreatePostModal.jsx';
 import CreatePostButton from '../../Components/CreatePostButton.jsx';
 import PostCard from '../../Components/Post-Card/PostCard.jsx'
 
-import { getAllPosts } from '../../Apis/appApi.js';
-import { toast } from 'react-toastify';
-
 const Home = () => {
-  const { userDetails } = useGlobalAppContext();
+  const { allPosts,getAllPostsFunction } = useGlobalAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [allPosts, setAllPosts] = useState([]);
+
+  useEffect(() => {
+    getAllPostsFunction();
+  }, [])
 
   useEffect(() => {
     if (isModalOpen) {
@@ -24,22 +24,6 @@ const Home = () => {
     };
   }, [isModalOpen]);
 
-  const getAllPostsFunction = async () => {
-    try {
-      const response = await getAllPosts();
-      if (response?.status === 200) {
-        setAllPosts(response.data.data);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
-    }
-
-  }
-  useEffect(() => {
-    getAllPostsFunction();
-  }, [])
-
 
   return (
     <>
@@ -47,9 +31,9 @@ const Home = () => {
       {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen} />}
 
       {/* posts */}
-      {allPosts?.length > 0 && allPosts.map((post)=>{
-          return <PostCard post = {post}/>
-      }) }
+      {allPosts?.length > 0 && allPosts.map((post, index) => {
+        return <PostCard key={index} post={post} />
+      })}
     </>
   )
 }

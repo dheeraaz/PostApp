@@ -6,7 +6,7 @@ const CreatePostButton = ({setIsModalOpen}) => {
   const { userDetails } = useGlobalAppContext();
 
   return (
-    <div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-8'>
+    <div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-8 mb-2'>
         <div className='flex gap-2'>
           <Link
             to='/home/profile'

@@ -7,6 +7,7 @@ import { GoDotFill } from "react-icons/go";
 
 import { createPost } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
+import { useGlobalAppContext } from '../../Context/AppContext.jsx';
 
 const CreatePostModal = ({ setIsModalOpen }) => {
   // Tiptap editor content, for lifting state up
@@ -15,6 +16,9 @@ const CreatePostModal = ({ setIsModalOpen }) => {
   const [theme, setTheme] = useState("#f2f2f2")
   const [postError, setPostError] = useState();
   const [isUploading, setIsUploading] = useState(false);
+
+  const { getAllPostsFunction } = useGlobalAppContext();
+
 
 
   // handling theme change
@@ -44,9 +48,10 @@ const CreatePostModal = ({ setIsModalOpen }) => {
       setIsUploading(true);
 
       const response = await createPost(formData);
-      console.log(response);
+      
       if (response?.status === 200) {
         toast.success(response?.data?.message);
+        getAllPostsFunction();
         setIsModalOpen(false);
       }
     } catch (error) {
@@ -157,7 +162,7 @@ const CreatePostModal = ({ setIsModalOpen }) => {
         </div>}
 
         <div className='px-4 mb-8 flex items-center justify-end'>
-          <button onClick={handleCreate} disabled={isUploading} className={`px-4 py-1 rounded-md ${isUploading?"bg-gray-500 cursor-not-allowed":"bg-blue-500"} `}>Create Post</button>
+          <button onClick={handleCreate} disabled={isUploading} className={`px-4 py-1 rounded-md ${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500"} `}>Create Post</button>
         </div>
       </div>
 
