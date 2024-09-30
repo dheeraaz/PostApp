@@ -31,9 +31,13 @@ const Home = () => {
       {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen} />}
 
       {/* posts */}
-      {allPosts?.length > 0 && allPosts.map((post, index) => {
+      {allPosts?.length > 0 ? (allPosts.map((post, index) => {
         return <PostCard key={index} post={post} />
-      })}
+      })):(
+        <div className='text-center'>
+          <p className='text-gray-500'>No Posts Available</p>
+        </div>
+      )}
     </>
   )
 }

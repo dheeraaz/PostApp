@@ -8,8 +8,8 @@ export const multerUploadErrorHandler = async(err, req, res, next) => {
                 success: false
             })
         }else{
-            res.status(400).json({
-                statusCode: 400,
+            res.status(500).json({
+                statusCode: 500,
                 data:{},
                 message: err.message || "Error in uploading image",
                 success: false

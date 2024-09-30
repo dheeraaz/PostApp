@@ -74,3 +74,7 @@ export const createPost = async(frontendData)=>{
 export const getAllPosts = async()=>{
     return appApi.get('/v1/posts/getallposts')
 }
+
+export const deletePost = async(postId)=>{
+    return appApi.delete(`/v1/posts/deletepost/${postId}`)
+}

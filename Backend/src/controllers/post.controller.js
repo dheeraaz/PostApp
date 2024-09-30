@@ -8,7 +8,7 @@ import {
     apiResponse,
 } from '../utils/index.js'
 
-import { uploadMultipleOnCloudinary } from "../utils/cloudinary.js";
+import { uploadMultipleOnCloudinary, deleteMultipleFromClodinary } from "../utils/cloudinary.js";
 
 import logger from "../utils/logger.js";
 
@@ -75,7 +75,41 @@ const getAllPosts = asyncHandler(async (req, res) => {
     return res.status(200).json(new apiResponse(200, allPosts, "Successfully fetched all posts data"))
 })
 
+const deletePost = asyncHandler(async (req, res) => {
+    const postId = req.params.postId;
+
+    const postToBeDeleted = await Post.findById(postId);
+
+    if (!postToBeDeleted) {
+        return res.status(404).json(new apiError(404, "Post Not Found"));
+    }
+
+    // deleting images from cloudinary
+    if (postToBeDeleted?.postimgs.length > 0) {
+
+        const imagesToBeDeleted = postToBeDeleted.postimgs.map((img) => { return img.public_id });
+
+        deleteMultipleFromClodinary(imagesToBeDeleted)
+            .then((result) => {
+                // result can be an object or null
+                if(result) logger.info("status of image deletion==>", result?.deleted);
+                else logger.error("Error deleting image from Cloudinary==>",result )
+            })
+            .catch((error) => {
+                logger.error("Error deleting image from Cloudinary==>", error)
+            })
+    }
+
+    // deleting post
+    const deletePost = await Post.findByIdAndDelete(postToBeDeleted._id);
+
+    if(!deletePost) return res.status(500).json(new apiError(500, "Cannot delete post at this moment"))
+
+    return res.status(200).json(new apiResponse(204, {}, "Successfully deleted the post"))
+})
+
 export {
     createPost,
     getAllPosts,
+    deletePost,
 }
