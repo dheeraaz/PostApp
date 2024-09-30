@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const appApi = axios.create({
-    baseURL: 'http://localhost:3000/api/v1',
+    baseURL: 'http://localhost:3000/api',
     headers: { 'Content-Type': 'application/json' },
     withCredentials: true, //To include cookies in requests
     timeout: 10000, //timeout 10s
@@ -20,7 +20,7 @@ appApi.interceptors.response.use(function (response) {
     if (error.response.status === 401 && error.response.data.name === "AccessTokenExpired") {
         try {
             // hitting refreshtoken end point for refreshing tokens 
-            await appApi.post('/users/refreshtokens', {});
+            await appApi.post('v1/users/refreshtokens', {});
             console.log("Session Refreshed");
 
             // used while sending locally stored cookie to backend
@@ -40,15 +40,15 @@ appApi.interceptors.response.use(function (response) {
 });
 
 export const isUserLoggedIn = async () => {
-    return appApi.get("/users/isuserloggedin");
+    return appApi.get("v1/users/isuserloggedin");
 }
 
 export const logOut = async () => {
-    return appApi.post("/users/logout", {});
+    return appApi.post("v1/users/logout", {});
 }
 
 export const uploadProfilePic = async (frontendData)=>{
-    return appApi.patch('/users/updateprofilepic', frontendData, {
+    return appApi.patch('v1/users/updateprofilepic', frontendData, {
         headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -56,9 +56,17 @@ export const uploadProfilePic = async (frontendData)=>{
 }
 
 export const uploadCoverPic = async (frontendData)=>{
-    return appApi.patch('/users/updatecoverpic', frontendData, {
+    return appApi.patch('v1/users/updatecoverpic', frontendData, {
         headers: {
             'Content-Type': 'multipart/form-data',
           },
+    })
+}
+
+export const createPost = async(frontendData)=>{
+    return appApi.post('/v1/posts/createpost', frontendData, {
+        headers:{
+            'Content-Type':'multipart/form-data'
+        }
     })
 }

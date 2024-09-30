@@ -1,8 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "node:fs";
 import logger from "./logger.js";
-import pLimit from 'p-limit';
-import { maximumImagecount } from "../constants/constants.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -10,8 +8,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
-// function to upload only image
 const uploadOnCloudinary = async (localFilePath) => {
   try {
     if (!localFilePath) return null;
@@ -35,17 +31,6 @@ const uploadOnCloudinary = async (localFilePath) => {
 
     return null;
   }
-};
-
-const limit = pLimit(maximumImagecount)
-// function to upload multiple images
-const uploadMultipleOnCloudinary = (fileArrayLocalPath) => {
-  return fileArrayLocalPath.map((image) => {
-    return limit(async () => {
-      const result = await cloudinary.uploader.upload(image);
-      return result;
-    });
-  });
 };
 
 const extractPublicIdFromUrl = (imageUrl) => {
@@ -75,4 +60,4 @@ const deleteFromCloudinary = async (imageUrl) => {
   }
 };
 
-export { uploadOnCloudinary, deleteFromCloudinary, uploadMultipleOnCloudinary };
+export { uploadOnCloudinary, deleteFromCloudinary };

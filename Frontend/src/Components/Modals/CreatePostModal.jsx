@@ -5,18 +5,17 @@ import parse from 'html-react-parser';
 import MultipleImgUpload from '../MultipleImgUpload/MultipleImgUpload';
 import { GoDotFill } from "react-icons/go";
 
+import { createPost } from '../../Apis/appApi.js';
+import { toast } from 'react-toastify';
+
 const CreatePostModal = ({ setIsModalOpen }) => {
   // Tiptap editor content, for lifting state up
   const [editorContent, setEditorContent] = useState("");
   const [postImages, setPostImages] = useState([]);
   const [theme, setTheme] = useState("#f2f2f2")
   const [postError, setPostError] = useState();
+  const [isUploading, setIsUploading] = useState(false);
 
-  // theme: "#f2f2f2",
-  // theme: "#4a86d4",
-  // theme: "#bb86fc",
-  // theme: "#03dac6",
-  // theme: "#ffc436",
 
   // handling theme change
   const handleThemeChange = (e) => {
@@ -25,7 +24,7 @@ const CreatePostModal = ({ setIsModalOpen }) => {
 
 
   // Handle saving the post content
-  const handleSave = () => {
+  const handleCreate = async () => {
     setPostError("");
 
     if ((editorContent === "<p></p>" || editorContent === "") && !postImages.length > 0) {
@@ -36,18 +35,25 @@ const CreatePostModal = ({ setIsModalOpen }) => {
     const formData = new FormData();
     formData.append("content", editorContent);
 
-    postImages.forEach((image, index) => {
-      formData.append("postimgs", image); 
+    postImages.forEach((image) => {
+      formData.append("postimgs", image);
     });
-
     formData.append("theme", theme);
 
-    console.log("++++++++++++++++");
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
+    try {
+      setIsUploading(true);
+
+      const response = await createPost(formData);
+      console.log(response);
+      if (response?.status === 200) {
+        toast.success(response?.data?.message);
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error?.message || "Error in creating post")
+    } finally {
+      setIsUploading(false);
     }
-    console.log("---------------");
-    console.log("heeelo");
   }
 
 
@@ -151,7 +157,7 @@ const CreatePostModal = ({ setIsModalOpen }) => {
         </div>}
 
         <div className='px-4 mb-8 flex items-center justify-end'>
-          <button onClick={handleSave} className='bg-blue-500 px-4 py-1 rounded-md'>Create Post</button>
+          <button onClick={handleCreate} disabled={isUploading} className={`px-4 py-1 rounded-md ${isUploading?"bg-gray-500 cursor-not-allowed":"bg-blue-500"} `}>Create Post</button>
         </div>
       </div>
 
