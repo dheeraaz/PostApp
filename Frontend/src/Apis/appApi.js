@@ -70,3 +70,7 @@ export const createPost = async(frontendData)=>{
         }
     })
 }
+
+export const getAllPosts = async()=>{
+    return appApi.get('/v1/posts/getallposts')
+}

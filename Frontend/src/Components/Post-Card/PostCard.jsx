@@ -4,32 +4,17 @@ import { format } from "date-fns"
 import Carousel from '../Carousel/Carousel.jsx';
 import { BsHeart, BsHeartFill, BsHeartbreak, BsHeartbreakFill } from "react-icons/bs";
 import parse from 'html-react-parser';
-import './PostCard.css' 
+import './PostCard.css'
+import { useGlobalAppContext } from '../../Context/AppContext.jsx';
 
 {/* <BsHeart /> */ }
 {/* <BsHeartFill /> */ }
 {/* <BsHeartbreak /> */ }
 {/* <BsHeartbreakFill /> */ }
 
-const post = {
-    user: {
-        _id: "66ed0b0085cca36cd7c12b0b",
-        username: "Tyrion Thapa",
-        profilepic: "http://res.cloudinary.com/dhirajcloudinary/image/upload/v1727070251/oomthq2kf88mtly3ofgi.jpg",
-    },
-    content: "Lorem ipsum dolor sit amet. In rhoncus vitae elit quis vestibulum. Vestibulum vel augue diam. Fusce dictum ac risus quis hendrerit. Aenean efficitur diam ut elit pretium, eget porta urna mattis. Curabitur in eleifend orci. Nam posuere, nulla sit amet blandit tempor, ipsum sem porta leo, dignissim congue eros dolor nec libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    postimgs: ["https://images.unsplash.com/photo-1726672460396-cd3e7ff2453f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1726828952256-293d9b81ff2d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNHx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1726853522009-8dc4c4e306a3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxN3x8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1726309356095-e4c9be366c13?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzNnx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1726487536376-846cd82fbd78?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0MHx8fGVufDB8fHx8fA%3D%3D"],
-    // theme: "#f2f2f2",
-    // theme: "#4a86d4",
-    // theme: "#bb86fc",
-    // theme: "#03dac6",
-    theme: "#ffc436",
-    updatedAt: "2024-09-23T06:10:51.873+00:00",
-    likedby: ["jkhj", 'jklj'],
-    dislikedby: ["hkhjk", "hhk"],
-}
 
-const PostCard = () => {
+const PostCard = ({ post }) => {
+    const { userDetails } = useGlobalAppContext();
 
     return (
         <div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-4 mt-2'>
@@ -38,7 +23,7 @@ const PostCard = () => {
                     to='/home/profile'
                     className='w-10 h-10 min-h-[40px] min-w-[40px] rounded-full'
                 >
-                    <img src={post.user.profilepic} alt="prfile_img" className='w-full h-full rounded-full bg-gray-700 object-cover aspect-square' />
+                    <img src={post.user.profilepic} alt="profile_img" className='w-full h-full rounded-full bg-gray-700 object-cover aspect-square' />
                 </Link>
 
                 <div>

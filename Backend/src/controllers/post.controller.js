@@ -62,6 +62,20 @@ const createPost = asyncHandler(async (req, res) => {
     res.status(200).json(new apiResponse(200, newPost, "Successfully created the post"))
 })
 
+const getAllPosts = asyncHandler(async (req, res) => {
+
+    // finding all posts
+    const allPosts = await Post
+        .find()
+        .populate('user', '_id username profilepic')
+        .populate('likedby', '_id username profilepic')
+        .populate('dislikedby', '_id username profilepic');
+
+
+    return res.status(200).json(new apiResponse(200, allPosts, "Successfully fetched all posts data"))
+})
+
 export {
     createPost,
+    getAllPosts,
 }

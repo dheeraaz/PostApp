@@ -21,7 +21,7 @@ const Carousel = ({ slides }) => {
             <div className={`w-full h-full flex transition-all ease-out duration-500`} style={{ transform: `translateX(-${current * 100}%)` }}>
                 {slides.map((s, index) => {
                     return <div key={index} className='min-w-full h-full'>
-                        <img src={s} alt={`postImg_${index}`} className='w-full h-full object-contain' />
+                        <img src={s.secure_url} alt={`postImg_${index}`} className='w-full h-full object-contain' />
                     </div>
                 })}
             </div>
