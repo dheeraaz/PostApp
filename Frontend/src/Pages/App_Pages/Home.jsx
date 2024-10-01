@@ -52,7 +52,7 @@ const Home = () => {
       
       {/* posts */}
       {allPosts?.length > 0 ? (allPosts.map((post, index) => {
-        return <PostCard key={index} post={post} deletePostFromHome={deletePostFromHome}/>
+        return <PostCard key={index} post={post} deletePostFromHome={deletePostFromHome} getAllPostsFunction={getAllPostsFunction}/>
       })) : (
         <div className='text-center'>
           <p className='text-gray-500'>No Posts Available</p>

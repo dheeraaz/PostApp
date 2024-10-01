@@ -19,7 +19,7 @@ import UpdatePostModal from '../Modals/UpdatePostModal.jsx';
 {/* <BsHeartbreakFill /> */ }
 
 
-const PostCard = ({ post, deletePostFromHome, deletePostFromProfile }) => {
+const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPostsFunction, getAllPostsFunction}) => {
     const { userDetails } = useGlobalAppContext();
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [currentPostId, setCurrentPostId] = useState(null); //state to store the post id of post which need to be updated
@@ -82,7 +82,7 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile }) => {
                 </div>}
 
                 {/* update post modal */}
-                {isUpdateModalOpen && <UpdatePostModal setIsUpdateModalOpen={setIsUpdateModalOpen} currentPostId={currentPostId} />}
+                {isUpdateModalOpen && <UpdatePostModal setIsUpdateModalOpen={setIsUpdateModalOpen} currentPostId={currentPostId} getAllPostsFunction={getAllPostsFunction} getOwnPostsFunction={getOwnPostsFunction} />}
 
             </div>
 

@@ -61,7 +61,7 @@ const Profile = () => {
 
             {/* posts */}
             {ownPosts?.length > 0 ? (ownPosts.map((post, index) => {
-                return <PostCard key={index} post={post} deletePostFromProfile={deletePostFromProfile} />
+                return <PostCard key={index} post={post} deletePostFromProfile={deletePostFromProfile} getOwnPostsFunction={getOwnPostsFunction} />
             })) : (
                 <div className='text-center'>
                     <p className='text-gray-500'>No Posts Available</p>
