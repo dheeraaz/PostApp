@@ -35,15 +35,7 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
     formData.append("content", editorContent);
 
     postImages.forEach((image) => {
-      // formData.append("postimgs", image);
-
-      if(typeof image === 'string' && image.includes("cloudinary")){
-        formData.append("previousimgs", image)
-      }
-
-      if(typeof image !== 'string'){
-        formData.append('newimgfiles', image)
-      }
+      formData.append("postimgs", image);
     });
     formData.append("theme", theme);
 
@@ -70,21 +62,14 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
     } finally {
       setIsUploading(false);
     }
-
-
   }
 
   const getSinglePostFunction = async (id) => {
     try {
       const response = await getSinglePost(id);
       if(response?.status===200){
-        setEditorContent(response?.data?.data?.content);
-        setTheme(response?.data?.data?.theme);
-
-        if(response?.data?.data?.postimgs.length >0){
-          const images = response?.data?.data?.postimgs?.map((img)=>{return img.secure_url})
-          setPostImages(images);
-        }
+        console.log("Update=====", response.data.data)
+        setEditorContent(response?.data?.data?.content)
       }
     } catch (error) {
       console.error(error);
@@ -98,8 +83,8 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
 
 
   return (
-    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-screen h-screen backdrop-blur-[1px] flex items-center justify-center z-20 overflow-y-auto'>
-      <div className='w-[1000px] max-w-[90%]  mx-auto bg-_primary rounded-md relative max-h-[70vh] overflow-y-auto _scrollbar-CSS'>
+    <div className='w-full min-h-screen backdrop-blur-[1px] absolute top-0 left-0 flex items-center justify-center z-20 overflow-y-auto'>
+      <div className='w-[1000px] max-w-[90%] mx-auto bg-_primary rounded-md absolute top-10 md:top-24 max-h-[70vh] overflow-y-auto _scrollbar-CSS'>
         <button onClick={() => setIsUpdateModalOpen(false)} className='absolute top-3 right-3 rounded-full p-1 hover:bg-gray-600'><RxCross2 size={24} /></button>
 
         {/* Text Editor */}
@@ -115,14 +100,14 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
         </div>
 
         {/* Theme Selection Option */}
-        <ThemeSelector handleThemeChange={handleThemeChange} theme={theme}/>
+        <ThemeSelector handleThemeChange={handleThemeChange} />
 
         {postError && <div className='mb-2 px-4'>
           <p className=' text-center text-sm text-red-600 font-_poppins'>{postError}</p>
         </div>}
 
         <div className='px-4 mb-8 flex items-center justify-end'>
-          <button onClick={handleCreate} disabled={isUploading} className={`px-4 py-1 rounded-md ${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500"} `}>Update Post</button>
+          <button onClick={handleCreate} disabled={isUploading} className={`px-4 py-1 rounded-md ${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500"} `}>Create Post</button>
         </div>
       </div>
 

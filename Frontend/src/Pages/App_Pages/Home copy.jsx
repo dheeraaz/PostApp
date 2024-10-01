@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import CreatePostButton from '../../Components/CreatePostButton.jsx';
 import CreatePostModal from '../../Components/Modals/CreatePostModal.jsx';
+import UpdatePostModal from '../../Components/Modals/UpdatePostModal.jsx'
 import PostCard from '../../Components/Post-Card/PostCard.jsx'
 import { getAllPosts } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [allPosts, setAllPosts] = useState([]);
-  
+  const [currentPostId, setCurrentPostId] = useState(null); //state to store the post id of post which need to be updated
 
   const getAllPostsFunction = async () => {
     try {
@@ -27,6 +29,11 @@ const Home = () => {
     // Removing the post from allPosts by filtering it out
     setAllPosts((prevPosts) => prevPosts.filter(post => post._id !== postId));
   }
+
+  const openUpdateModal = (postId) => {
+    setCurrentPostId(postId); // Set the post ID to be updated
+    setIsUpdateModalOpen(true); // Open the update modal
+  };
 
   useEffect(() => {
     getAllPostsFunction();
@@ -49,10 +56,11 @@ const Home = () => {
     <>
       <CreatePostButton setIsModalOpen={setIsModalOpen} />
       {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen} getAllPostsFunction={getAllPostsFunction} />}
-      
+      {isUpdateModalOpen && <UpdatePostModal setIsUpdateModalOpen={setIsUpdateModalOpen} currentPostId={currentPostId} getAllPostsFunction={getAllPostsFunction} />}
+
       {/* posts */}
       {allPosts?.length > 0 ? (allPosts.map((post, index) => {
-        return <PostCard key={index} post={post} deletePostFromHome={deletePostFromHome}/>
+        return <PostCard key={index} post={post} deletePostFromHome={deletePostFromHome} openUpdateModal={openUpdateModal} />
       })) : (
         <div className='text-center'>
           <p className='text-gray-500'>No Posts Available</p>

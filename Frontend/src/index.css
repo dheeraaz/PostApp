@@ -10,7 +10,7 @@
   box-sizing: border-box;
 }
 body {
-  @apply bg-[#040512] text-white font-_inter;
+  @apply bg-[#040512] text-white font-_inter overflow-x-hidden;
 }
 #root::before {
   @apply content-[''] w-96 h-96 bg-blue-600 fixed rounded-full blur-[200px] -top-12 -left-12 -z-10;

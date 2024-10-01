@@ -68,7 +68,9 @@ const MultipleImgUpload = ({ setPostError, postImages, setPostImages }) => {
                 {
                     postImages.map((postImg, index) => (
                         <div key={index} className='relative w-[120px] h-[100px]'>
-                            <img src={URL.createObjectURL(postImg)} alt="" className='w-full h-full object-cover' />
+                            {typeof postImg === 'string' && postImg.includes("cloudinary") && <img src={postImg} alt="" className='w-full h-full object-cover' /> }
+                            {typeof postImg !== 'string' && <img src={URL.createObjectURL(postImg)} alt="" className='w-full h-full object-cover' />}
+                            {/* <img src={URL.createObjectURL(postImg)} alt="" className='w-full h-full object-cover' /> */}
                             <div className='absolute bottom-1 right-1 flex justify-end'>
                                 <button onClick={() => handleImgDelete(index)} className='hover:bg-gray-200 p-1 rounded-full group'><MdDeleteForever size={20} className=' group-hover:text-red-500' /></button>
                             </div>
