@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 {/* <BsHeartbreakFill /> */ }
 
 
-const PostCard = ({ post, deletePostFromHome, deletePostFromProfile }) => {
+const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, openUpdateModal }) => {
     const { userDetails } = useGlobalAppContext();
 
 
@@ -61,7 +61,7 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile }) => {
                 </div>
 
                 {userDetails._id === post.user._id && <div className='flex justify-between gap-2'>
-                    <button className='w-fit h-fit pb-1 hover:border-b-2' style={{ borderColor: post.theme }}>
+                    <button onClick={()=>openUpdateModal(post._id)} className='w-fit h-fit pb-1 hover:border-b-2' style={{ borderColor: post.theme }}>
                         <FiEdit size={24} style={{ color: post.theme }} />
                     </button>
                     <button onClick={() => deletePostFunction(post._id)} className='w-fit h-fit pb-[2px] border-b-2 border-transparent hover:border-red-500 '>

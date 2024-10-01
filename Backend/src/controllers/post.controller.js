@@ -101,6 +101,8 @@ const getUserPosts = asyncHandler(async (req, res) => {
 const deletePost = asyncHandler(async (req, res) => {
     const postId = req.params.postId;
 
+    if (!postId) throw new apiError(400, "PostId not provided")
+
     const postToBeDeleted = await Post.findById(postId);
 
     if (!postToBeDeleted) throw new apiError(404, "Post Not Found");
@@ -140,9 +142,22 @@ const deletePost = asyncHandler(async (req, res) => {
     return res.status(200).json(new apiResponse(204, {}, "Successfully deleted the post"))
 })
 
+const getSinglePost = asyncHandler(async (req, res) => {
+    const postId = req?.params?.postId;
+
+    if(!postId) throw new apiError(400, "Postid not provided");
+
+    const post = await Post.findById(postId);
+
+    if (!post) throw new apiError(404, "Post Not Found");
+
+    return res.status(200).json(new apiResponse(200, post, "Successfully fetched post"))
+})
+
 export {
     createPost,
     getAllPosts,
     getUserPosts,
     deletePost,
+    getSinglePost,
 }

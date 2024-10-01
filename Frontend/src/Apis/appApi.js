@@ -86,3 +86,7 @@ export const deletePost = async(postId)=>{
 export const getUserInfo = async(userId)=>{
     return appApi.get(`/v1/users/getuserinfo/${userId}`)
 }
+
+export const getSinglePost = async(postId)=>{
+    return appApi.get(`/v1/posts/getsinglepost/${postId}`)
+}

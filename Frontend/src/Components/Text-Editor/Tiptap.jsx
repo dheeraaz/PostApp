@@ -15,19 +15,20 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
+import { useEffect } from 'react';
 
 
 // define your extension array
-const extensions = [StarterKit, Underline, Highlight.configure({ multicolor: true }),  Placeholder.configure({ placeholder: 'Write Your Post Content...',})]
+const extensions = [StarterKit, Underline, Highlight.configure({ multicolor: true }), Placeholder.configure({ placeholder: 'Write Your Post Content...', })]
 
 // const content = `<p>Hello</p>`
 const content = ``
 
-const Tiptap = ({ setEditorContent }) => {
+const Tiptap = ({ editorContent, setEditorContent }) => {
 
     const editor = useEditor({
         extensions,
-        content,
+        content: editorContent,
         onUpdate: ({ editor }) => {
             setEditorContent(editor.getHTML()); // Update context with the editor content
         },
@@ -37,6 +38,11 @@ const Tiptap = ({ setEditorContent }) => {
         return null;
     }
 
+    useEffect(() => {
+        if (editor && editorContent !== editor.getHTML()) {
+            editor.commands.setContent(editorContent); // Updating editor when editorContent changes
+        }
+    }, [editorContent, editor]);
 
     return (
         <div>
@@ -147,7 +153,7 @@ const Tiptap = ({ setEditorContent }) => {
                     }
                     className={editor.isActive('code') ? 'is-active' : ''}
                 >
-                    <FaCode size={20}/>
+                    <FaCode size={20} />
                 </button>
 
                 <button

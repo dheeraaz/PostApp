@@ -68,7 +68,6 @@ const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunct
   }
 
 
-
   return (
     <div className='w-full min-h-screen backdrop-blur-[1px] absolute top-0 left-0 flex items-center justify-center z-20 overflow-y-auto'>
       <div className='w-[1000px] max-w-[90%] mx-auto bg-_primary rounded-md absolute top-10 md:top-24 max-h-[70vh] overflow-y-auto _scrollbar-CSS'>
@@ -76,7 +75,7 @@ const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunct
 
         {/* Text Editor */}
         <div className='mt-11 px-4 mb-2'>
-          <Tiptap setEditorContent={setEditorContent} />
+          <Tiptap editorContent={editorContent} setEditorContent={setEditorContent} />
         </div>
 
         <hr className='max-w-[96%] mx-auto mb-2 border-gray-500 h-[1px]' />

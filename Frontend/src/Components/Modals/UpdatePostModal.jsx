@@ -5,10 +5,10 @@ import MultipleImgUpload from '../MultipleImgUpload/MultipleImgUpload';
 import ThemeSelector from '../ThemeSelector.jsx';
 import parse from 'html-react-parser';
 
-import { createPost } from '../../Apis/appApi.js';
+import { createPost, getSinglePost } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 
-const UpdatePostModal = ({ setIsUpdateModalOpen, getAllPostsFunction, getOwnPostsFunction }) => {
+const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunction, getOwnPostsFunction }) => {
   // Tiptap editor content, for lifting state up
   const [editorContent, setEditorContent] = useState("");
   const [postImages, setPostImages] = useState([]);
@@ -64,6 +64,22 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, getAllPostsFunction, getOwnPost
     }
   }
 
+  const getSinglePostFunction = async (id) => {
+    try {
+      const response = await getSinglePost(id);
+      if(response?.status===200){
+        console.log("Update=====", response.data.data)
+        setEditorContent(response?.data?.data?.content)
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
+    }
+  }
+  useEffect(() => {
+    getSinglePostFunction(currentPostId);
+  }, [currentPostId])
+
 
 
   return (
@@ -73,7 +89,7 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, getAllPostsFunction, getOwnPost
 
         {/* Text Editor */}
         <div className='mt-11 px-4 mb-2'>
-          <Tiptap setEditorContent={setEditorContent} />
+          <Tiptap editorContent={editorContent} setEditorContent={setEditorContent} />
         </div>
 
         <hr className='max-w-[96%] mx-auto mb-2 border-gray-500 h-[1px]' />

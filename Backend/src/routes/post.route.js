@@ -9,6 +9,7 @@ import {
     getAllPosts,
     getUserPosts,
     deletePost,
+    getSinglePost,
 
 } from '../controllers/post.controller.js';
 
@@ -18,5 +19,6 @@ router.route('/createpost').post(verifyJWT, multerUpload.array('postimgs', maxim
 router.route('/getallposts').get(verifyJWT, getAllPosts);
 router.route('/getuserposts/:userId').get(verifyJWT, getUserPosts);
 router.route('/deletepost/:postId').delete(verifyJWT, deletePost);
+router.route('/getsinglepost/:postId').get(verifyJWT, getSinglePost);
 
 export default router
