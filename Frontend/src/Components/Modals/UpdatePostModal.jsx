@@ -5,7 +5,7 @@ import MultipleImgUpload from '../MultipleImgUpload/MultipleImgUpload';
 import ThemeSelector from '../ThemeSelector.jsx';
 import parse from 'html-react-parser';
 
-import { createPost, getSinglePost } from '../../Apis/appApi.js';
+import { getSinglePost, updatePost } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 
 const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunction, getOwnPostsFunction }) => {
@@ -50,7 +50,7 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
     try {
       setIsUploading(true);
 
-      const response = await createPost(formData);
+      const response = await updatePost({ frontendData: formData, postId: currentPostId });
 
       if (response?.status === 200) {
         toast.success(response?.data?.message);
@@ -63,7 +63,7 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
           getAllPostsFunction();
         }
 
-        setIsModalOpen(false);
+        setIsUpdateModalOpen(false);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || error?.message || "Error in creating post")
@@ -91,6 +91,7 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
       toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
     }
   }
+
   useEffect(() => {
     getSinglePostFunction(currentPostId);
   }, [currentPostId])

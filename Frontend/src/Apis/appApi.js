@@ -47,46 +47,54 @@ export const logOut = async () => {
     return appApi.post("v1/users/logout", {});
 }
 
-export const uploadProfilePic = async (frontendData)=>{
+export const uploadProfilePic = async (frontendData) => {
     return appApi.patch('v1/users/updateprofilepic', frontendData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-          },
+        },
     })
 }
 
-export const uploadCoverPic = async (frontendData)=>{
+export const uploadCoverPic = async (frontendData) => {
     return appApi.patch('v1/users/updatecoverpic', frontendData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-          },
+        },
     })
 }
 
-export const createPost = async(frontendData)=>{
+export const createPost = async (frontendData) => {
     return appApi.post('/v1/posts/createpost', frontendData, {
-        headers:{
-            'Content-Type':'multipart/form-data'
+        headers: {
+            'Content-Type': 'multipart/form-data'
         }
     })
 }
 
-export const getAllPosts = async()=>{
+export const getAllPosts = async () => {
     return appApi.get('/v1/posts/getallposts')
 }
 
-export const getUserPosts = async(userId)=>{
+export const getUserPosts = async (userId) => {
     return appApi.get(`/v1/posts/getuserposts/${userId}`)
 }
 
-export const deletePost = async(postId)=>{
+export const deletePost = async (postId) => {
     return appApi.delete(`/v1/posts/deletepost/${postId}`)
 }
 
-export const getUserInfo = async(userId)=>{
+export const getUserInfo = async (userId) => {
     return appApi.get(`/v1/users/getuserinfo/${userId}`)
 }
 
-export const getSinglePost = async(postId)=>{
+export const getSinglePost = async (postId) => {
     return appApi.get(`/v1/posts/getsinglepost/${postId}`)
+}
+
+export const updatePost = async ({frontendData, postId})=>{
+    return appApi.patch(`v1/posts/updatepost/${postId}`, frontendData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    }) 
 }
