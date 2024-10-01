@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
 import Tiptap from '../Text-Editor/TipTap';
-import parse from 'html-react-parser';
 import MultipleImgUpload from '../MultipleImgUpload/MultipleImgUpload';
+import ThemeSelector from '../ThemeSelector.jsx';
+import parse from 'html-react-parser';
 import { GoDotFill } from "react-icons/go";
 
 import { createPost } from '../../Apis/appApi.js';
@@ -47,7 +48,9 @@ const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunct
 
       if (response?.status === 200) {
         toast.success(response?.data?.message);
-
+        
+        setIsModalOpen(false);
+        
         if (getOwnPostsFunction) {
           getOwnPostsFunction();
         }
@@ -56,7 +59,6 @@ const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunct
           getAllPostsFunction();
         }
 
-        setIsModalOpen(false);
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || error?.message || "Error in creating post")
@@ -85,7 +87,7 @@ const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunct
         </div>
 
         {/* Theme Selection Option */}
-        <div className='mb-2 px-4 flex items-center gap-2'>
+        {/* <div className='mb-2 px-4 flex items-center gap-2'>
           <p>Theme: </p>
           <div className='flex items-center'>
             <label className="relative">
@@ -159,7 +161,9 @@ const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunct
               </div>
             </label>
           </div>
-        </div>
+        </div> */}
+
+        <ThemeSelector handleThemeChange={handleThemeChange}/>
 
         {postError && <div className='mb-2 px-4'>
           <p className=' text-center text-sm text-red-600 font-_poppins'>{postError}</p>

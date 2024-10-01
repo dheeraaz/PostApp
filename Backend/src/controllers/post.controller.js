@@ -71,25 +71,28 @@ const createPost = asyncHandler(async (req, res) => {
     res.status(200).json(new apiResponse(200, newPost, "Successfully created the post"))
 })
 
-const getAllPosts = asyncHandler(async (req, res) => { 
+const getAllPosts = asyncHandler(async (req, res) => {
 
     // finding all posts
     const allPosts = await Post
         .find()
         .populate('user', '_id username profilepic')
         .populate('likedby', '_id username profilepic')
-        .populate('dislikedby', '_id username profilepic');
+        .populate('dislikedby', '_id username profilepic')
+        .sort({ updatedAt: -1 }); //sorting the post based on recently updated(or created) post
+
 
     return res.status(200).json(new apiResponse(200, allPosts, "Successfully fetched all posts data"))
 })
 
-const getUserPosts = asyncHandler(async(req, res)=>{
+const getUserPosts = asyncHandler(async (req, res) => {
 
     const userPosts = await Post
-    .find({user:req?.params?.userId})
-    .populate('user', '_id username profilepic')
-    .populate('likedby', '_id username profilepic')
-    .populate('dislikedby', '_id username profilepic');
+        .find({ user: req?.params?.userId })
+        .populate('user', '_id username profilepic')
+        .populate('likedby', '_id username profilepic')
+        .populate('dislikedby', '_id username profilepic')
+        .sort({ updatedAt: -1 }); //sorting the post based on recently updated(or created) post
 
     res.status(200).json(new apiResponse(200, userPosts, "Successfully fetched user's post"))
 
