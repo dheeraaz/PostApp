@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getAllPosts, isUserLoggedIn } from "../Apis/appApi.js";
+import { isUserLoggedIn } from "../Apis/appApi.js";
 import { toast } from 'react-toastify';
 
 export const AppContext = createContext();
@@ -8,20 +8,6 @@ export const AppContextProvider = ({ children }) => {
     const [userDetails, setUserDetails] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAppLoading, setIsAppLoading] = useState(true);
-
-    const [allPosts, setAllPosts] = useState([]);
-
-    const getAllPostsFunction = async () => {
-        try {
-            const response = await getAllPosts();
-            if (response?.status === 200) {
-                setAllPosts(response.data.data);
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
-        }
-    }
 
     useEffect(() => {
         ; (async () => {
@@ -49,7 +35,7 @@ export const AppContextProvider = ({ children }) => {
         })()
     }, [])
 
-    return <AppContext.Provider value={{ userDetails, setUserDetails, isLoggedIn, setIsLoggedIn, isAppLoading, allPosts, setAllPosts, getAllPostsFunction }}>
+    return <AppContext.Provider value={{ userDetails, setUserDetails, isLoggedIn, setIsLoggedIn, isAppLoading }}>
         {children}
     </AppContext.Provider>
 }

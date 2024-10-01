@@ -71,7 +71,7 @@ const createPost = asyncHandler(async (req, res) => {
     res.status(200).json(new apiResponse(200, newPost, "Successfully created the post"))
 })
 
-const getAllPosts = asyncHandler(async (req, res) => {
+const getAllPosts = asyncHandler(async (req, res) => { 
 
     // finding all posts
     const allPosts = await Post

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { format } from "date-fns"
 import Carousel from '../Carousel/Carousel.jsx';
@@ -17,19 +17,25 @@ import { toast } from 'react-toastify';
 {/* <BsHeartbreakFill /> */ }
 
 
-const PostCard = ({ post, getOwnPostsFunction }) => {
-    const { userDetails, getAllPostsFunction } = useGlobalAppContext();
+const PostCard = ({ post, deletePostFromHome, deletePostFromProfile }) => {
+    const { userDetails } = useGlobalAppContext();
+
 
     const deletePostFunction = async (id) => {
         try {
             const response = await deletePost(id)
             if (response?.status === 200) {
-                toast.success(response?.data?.message)
-                if (getOwnPostsFunction) {
-                    getOwnPostsFunction();
-                } else {
-                    getAllPostsFunction();
+                if(deletePostFromHome){
+                    // deleting post from allPosts state in home page
+                    deletePostFromHome(id);
                 }
+                
+                if(deletePostFromProfile){
+                    // deleting post from ownPosts state in profile page
+                    deletePostFromProfile(id);
+                }
+
+                toast.success(response?.data?.message)
             }
         } catch (error) {
             console.error(error);
@@ -38,7 +44,7 @@ const PostCard = ({ post, getOwnPostsFunction }) => {
     }
 
     return (
-        <div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-4 mb-2'>
+       post && (<div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-4 mb-2'>
             <div className='flex justify-between'>
                 <div className='flex gap-2 items-center'>
                     <Link
@@ -88,7 +94,7 @@ const PostCard = ({ post, getOwnPostsFunction }) => {
                 </button>
             </div>}
 
-        </div>
+        </div>)
     )
 }
 

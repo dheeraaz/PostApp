@@ -28,9 +28,15 @@ const Profile = () => {
             toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
         }
     }
+
+    const deletePostFromProfile = (postId) => {
+        // Removing the post from allPosts by filtering it out
+        setOwnPosts((prevPosts) => prevPosts.filter(post => post._id !== postId));
+    }
+
     useEffect(() => {
         getOwnPostsFunction();
-    },[])
+    }, [])
 
     useEffect(() => {
         if (isModalOpen || isProfileModalOpen || isCoverModalOpen) {
@@ -47,15 +53,15 @@ const Profile = () => {
 
     return (
         <>
-            <ProfileCard setIsProfileModalOpen={setIsProfileModalOpen} setIsCoverModalOpen={setIsCoverModalOpen} postCount = {ownPosts.length} profileId={userDetails._id}/>
-            <CreatePostButton setIsModalOpen={setIsModalOpen}/>
-            {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen} getOwnPostsFunction= {getOwnPostsFunction} />}
+            <ProfileCard setIsProfileModalOpen={setIsProfileModalOpen} setIsCoverModalOpen={setIsCoverModalOpen} postCount={ownPosts.length} profileId={userDetails._id} />
+            <CreatePostButton setIsModalOpen={setIsModalOpen} />
+            {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen} getOwnPostsFunction={getOwnPostsFunction} />}
             {isProfileModalOpen && <ProfileImageModal setIsProfileModalOpen={setIsProfileModalOpen} />}
             {isCoverModalOpen && <CoverImageModal setIsCoverModalOpen={setIsCoverModalOpen} />}
 
             {/* posts */}
             {ownPosts?.length > 0 ? (ownPosts.map((post, index) => {
-                return <PostCard key={index} post={post} getOwnPostsFunction= {getOwnPostsFunction} />
+                return <PostCard key={index} post={post} deletePostFromProfile={deletePostFromProfile} />
             })) : (
                 <div className='text-center'>
                     <p className='text-gray-500'>No Posts Available</p>

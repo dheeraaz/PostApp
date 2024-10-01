@@ -9,17 +9,13 @@ import { createPost } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 import { useGlobalAppContext } from '../../Context/AppContext.jsx';
 
-const CreatePostModal = ({ setIsModalOpen, getOwnPostsFunction }) => {
+const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunction }) => {
   // Tiptap editor content, for lifting state up
   const [editorContent, setEditorContent] = useState("");
   const [postImages, setPostImages] = useState([]);
   const [theme, setTheme] = useState("#f2f2f2")
   const [postError, setPostError] = useState();
   const [isUploading, setIsUploading] = useState(false);
-
-  const { getAllPostsFunction } = useGlobalAppContext();
-
-
 
   // handling theme change
   const handleThemeChange = (e) => {
@@ -51,13 +47,15 @@ const CreatePostModal = ({ setIsModalOpen, getOwnPostsFunction }) => {
 
       if (response?.status === 200) {
         toast.success(response?.data?.message);
-        
+
         if (getOwnPostsFunction) {
           getOwnPostsFunction();
-        } else {
-          getAllPostsFunction();
         }
         
+        if (getAllPostsFunction) {
+          getAllPostsFunction();
+        }
+
         setIsModalOpen(false);
       }
     } catch (error) {
