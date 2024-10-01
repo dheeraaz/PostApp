@@ -550,6 +550,20 @@ const updateCoverPic = asyncHandler(async (req, res) => {
     );
 });
 
+// get user info
+
+const getUserInfo = asyncHandler(async(req, res)=>{
+    const userId = req?.params?.userId;
+
+    if(!userId) throw new apiError(400, "UserId not provided");
+ 
+    const user = await User.findById(userId).select("-password -refreshtoken");
+
+    if(!user) throw new apiError(404, "User not found");
+
+    return res.status(200).json(new apiResponse(200, user, "Successfully fetched user info"))
+})
+
 export {
   isUserLoggedIn,
   registerUser,
@@ -561,4 +575,5 @@ export {
   refreshTokens,
   updateProfilePic,
   updateCoverPic,
+  getUserInfo,
 };

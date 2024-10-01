@@ -16,6 +16,7 @@ import {
   refreshTokens,
   updateProfilePic,
   updateCoverPic,
+  getUserInfo,
 } from "../controllers/user.controller.js";
 
 import { validateWithSchema } from "../middlewares/zod_validator.middleware.js";
@@ -52,5 +53,9 @@ router
 router
   .route("/updatecoverpic")
   .patch(verifyJWT, multerUpload.single("coverpic"), multerUploadErrorHandler,updateCoverPic);
+
+router
+  .route("/getuserinfo/:userId")
+  .get(verifyJWT, getUserInfo);
 
 export default router;

@@ -75,6 +75,14 @@ export const getAllPosts = async()=>{
     return appApi.get('/v1/posts/getallposts')
 }
 
+export const getUserPosts = async(userId)=>{
+    return appApi.get(`/v1/posts/getuserposts/${userId}`)
+}
+
 export const deletePost = async(postId)=>{
     return appApi.delete(`/v1/posts/deletepost/${postId}`)
+}
+
+export const getUserInfo = async(userId)=>{
+    return appApi.get(`/v1/users/getuserinfo/${userId}`)
 }

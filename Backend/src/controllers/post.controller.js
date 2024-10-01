@@ -1,4 +1,5 @@
 import { Post } from "../models/post.model.js";
+import { User } from "../models/user.model.js";
 import fs from "node:fs";
 
 
@@ -58,6 +59,14 @@ const createPost = asyncHandler(async (req, res) => {
         postimgs,
         theme
     })
+
+    // Updating the user document by adding newly created post in his posts field
+    const user = await User.findById(req.user._id);
+    if (user) {
+        user.posts.push(newPost._id);
+        await user.save({ validateBeforeSave: false });
+    }
+
     // upload images to cloudinary
     res.status(200).json(new apiResponse(200, newPost, "Successfully created the post"))
 })
@@ -71,8 +80,19 @@ const getAllPosts = asyncHandler(async (req, res) => {
         .populate('likedby', '_id username profilepic')
         .populate('dislikedby', '_id username profilepic');
 
-
     return res.status(200).json(new apiResponse(200, allPosts, "Successfully fetched all posts data"))
+})
+
+const getUserPosts = asyncHandler(async(req, res)=>{
+
+    const userPosts = await Post
+    .find({user:req?.params?.userId})
+    .populate('user', '_id username profilepic')
+    .populate('likedby', '_id username profilepic')
+    .populate('dislikedby', '_id username profilepic');
+
+    res.status(200).json(new apiResponse(200, userPosts, "Successfully fetched user's post"))
+
 })
 
 const deletePost = asyncHandler(async (req, res) => {
@@ -80,9 +100,7 @@ const deletePost = asyncHandler(async (req, res) => {
 
     const postToBeDeleted = await Post.findById(postId);
 
-    if (!postToBeDeleted) {
-        return res.status(404).json(new apiError(404, "Post Not Found"));
-    }
+    if (!postToBeDeleted) throw new apiError(404, "Post Not Found");
 
     // deleting images from cloudinary
     if (postToBeDeleted?.postimgs.length > 0) {
@@ -92,8 +110,8 @@ const deletePost = asyncHandler(async (req, res) => {
         deleteMultipleFromClodinary(imagesToBeDeleted)
             .then((result) => {
                 // result can be an object or null
-                if(result) logger.info("status of image deletion==>", result?.deleted);
-                else logger.error("Error deleting image from Cloudinary==>",result )
+                if (result) logger.info("status of image deletion==>", result?.deleted);
+                else logger.error("Error deleting image from Cloudinary==>", result)
             })
             .catch((error) => {
                 logger.error("Error deleting image from Cloudinary==>", error)
@@ -103,7 +121,18 @@ const deletePost = asyncHandler(async (req, res) => {
     // deleting post
     const deletePost = await Post.findByIdAndDelete(postToBeDeleted._id);
 
-    if(!deletePost) return res.status(500).json(new apiError(500, "Cannot delete post at this moment"))
+    // Updating the user document by removing this recently deleted post from his posts array
+    const user = await User.findById(req.user._id);
+    if (user) {
+        const index = user.posts.indexOf(deletePost._id);
+        // only splice array when item is found
+        if (index > -1) {
+            user.posts.splice(index, 1);
+        }
+        await user.save({ validateBeforeSave: false });
+    }
+
+    if (!deletePost) return res.status(500).json(new apiError(500, "Cannot delete post at this moment"))
 
     return res.status(200).json(new apiResponse(204, {}, "Successfully deleted the post"))
 })
@@ -111,5 +140,6 @@ const deletePost = asyncHandler(async (req, res) => {
 export {
     createPost,
     getAllPosts,
+    getUserPosts,
     deletePost,
 }

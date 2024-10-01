@@ -9,7 +9,7 @@ import { createPost } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 import { useGlobalAppContext } from '../../Context/AppContext.jsx';
 
-const CreatePostModal = ({ setIsModalOpen }) => {
+const CreatePostModal = ({ setIsModalOpen, getOwnPostsFunction }) => {
   // Tiptap editor content, for lifting state up
   const [editorContent, setEditorContent] = useState("");
   const [postImages, setPostImages] = useState([]);
@@ -48,10 +48,16 @@ const CreatePostModal = ({ setIsModalOpen }) => {
       setIsUploading(true);
 
       const response = await createPost(formData);
-      
+
       if (response?.status === 200) {
         toast.success(response?.data?.message);
-        getAllPostsFunction();
+        
+        if (getOwnPostsFunction) {
+          getOwnPostsFunction();
+        } else {
+          getAllPostsFunction();
+        }
+        
         setIsModalOpen(false);
       }
     } catch (error) {

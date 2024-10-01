@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 {/* <BsHeartbreakFill /> */ }
 
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, getOwnPostsFunction }) => {
     const { userDetails, getAllPostsFunction } = useGlobalAppContext();
 
     const deletePostFunction = async (id) => {
@@ -25,7 +25,11 @@ const PostCard = ({ post }) => {
             const response = await deletePost(id)
             if (response?.status === 200) {
                 toast.success(response?.data?.message)
-                getAllPostsFunction();
+                if (getOwnPostsFunction) {
+                    getOwnPostsFunction();
+                } else {
+                    getAllPostsFunction();
+                }
             }
         } catch (error) {
             console.error(error);
