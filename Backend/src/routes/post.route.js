@@ -10,6 +10,7 @@ import {
     getUserPosts,
     deletePost,
     getSinglePost,
+    updatePost,
 
 } from '../controllers/post.controller.js';
 
@@ -20,5 +21,8 @@ router.route('/getallposts').get(verifyJWT, getAllPosts);
 router.route('/getuserposts/:userId').get(verifyJWT, getUserPosts);
 router.route('/deletepost/:postId').delete(verifyJWT, deletePost);
 router.route('/getsinglepost/:postId').get(verifyJWT, getSinglePost);
+
+router.route('/updatepost/:postId').patch(verifyJWT, multerUpload.array('newimgfiles', maximumImagecount), multerUploadErrorHandler, updatePost);
+
 
 export default router

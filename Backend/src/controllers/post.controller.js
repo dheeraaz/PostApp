@@ -67,7 +67,6 @@ const createPost = asyncHandler(async (req, res) => {
         await user.save({ validateBeforeSave: false });
     }
 
-    // upload images to cloudinary
     res.status(200).json(new apiResponse(200, newPost, "Successfully created the post"))
 })
 
@@ -145,7 +144,7 @@ const deletePost = asyncHandler(async (req, res) => {
 const getSinglePost = asyncHandler(async (req, res) => {
     const postId = req?.params?.postId;
 
-    if(!postId) throw new apiError(400, "Postid not provided");
+    if (!postId) throw new apiError(400, "Postid not provided");
 
     const post = await Post.findById(postId);
 
@@ -154,10 +153,105 @@ const getSinglePost = asyncHandler(async (req, res) => {
     return res.status(200).json(new apiResponse(200, post, "Successfully fetched post"))
 })
 
+const updatePost = asyncHandler(async (req, res) => {
+    const postId = req?.params?.postId;
+    const { content, theme, previousimgs = [] } = req.body;
+    const fileArray = req.files;
+    let newpostimgs = [];
+    let imagesToBeDeleted = [];
+
+    if (!postId) throw new apiError(400, "Postid not provided");
+
+    const prevPost = await Post.findById(postId);
+
+    if (!prevPost) throw new apiError(404, "Post Not Found");
+
+    // here, previousimgs is an array of previous images, which user wants to keep
+    // previous image is an array of string or urls
+    // prevPost.postimgs is an array of object containing public id and secure_url
+    if (previousimgs.length > 0 && prevPost?.postimgs?.length > 0) {
+        prevPost.postimgs.forEach((img) => {
+            if (previousimgs.includes(img.secure_url)) {
+                newpostimgs.push(img)
+            } else {
+                imagesToBeDeleted.push(img.public_id)
+            }
+        });
+    } else if (prevPost?.postimgs?.length > 0) {
+        // here, all the previous images are supposed to be deleted
+        imagesToBeDeleted = prevPost.postimgs.map((img) => { return img.public_id });
+    }
+
+    if (imagesToBeDeleted.length > 0) {
+        deleteMultipleFromClodinary(imagesToBeDeleted)
+            .then((result) => {
+                // result can be an object or null
+                if (result) logger.info("status of image deletion==>", result?.deleted);
+                else logger.error("Error deleting image from Cloudinary==>", result)
+            })
+            .catch((error) => {
+                logger.error("Error deleting image from Cloudinary==>", error)
+            })
+    }
+
+    // uploading images if user has provided images
+    if (fileArray.length > 0) {
+        const fileArrayLocalPath = fileArray.map((image) => image.path);
+        try {
+            // Await the upload results
+            const uploadPromises = uploadMultipleOnCloudinary(fileArrayLocalPath);
+            const results = await Promise.all(uploadPromises);
+
+            if (!results) throw new apiError(500, "Failed to upload images")
+
+            // creating postimgs which is an array of object, object has: public_id and secure_url as key
+            const uploadedimgs = results.map((result) => {
+                return {
+                    public_id: result?.public_id,  //public id of image from cloudinary
+                    secure_url: result?.secure_url // secure_url of image from cloudinary
+                }
+            })
+
+            newpostimgs = [...newpostimgs, ...uploadedimgs];
+
+        } catch (error) {
+            logger.error("Error uploading post images:", error);
+            throw new apiError(
+                error?.statusCode || 500,
+                error?.message || "Failed to upload images",
+            );
+        } finally {
+            // removing all files - both scenario [image uploaded or not uploaded to cloudinary]
+            fileArrayLocalPath.map((localFile) => {
+                fs.unlinkSync(localFile, (err) => {
+                    if (err) logger.error("File couldn't be deleted from server");
+                });
+            })
+        }
+
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+        postId,
+        {
+            content,
+            theme,
+            postimgs: newpostimgs,
+        }, {
+        new: true,
+    }
+    )
+
+    if (!updatedPost) throw new apiError(500, "Failed to update the post");
+
+    res.status(200).json(new apiResponse(200, updatedPost, "Successfully updated the post"))
+})
+
 export {
     createPost,
     getAllPosts,
     getUserPosts,
     deletePost,
     getSinglePost,
+    updatePost,
 }
