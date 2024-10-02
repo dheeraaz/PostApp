@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { format } from "date-fns"
 import Carousel from '../Carousel/Carousel.jsx';
@@ -13,6 +13,7 @@ import { toggleDislike } from '../../Apis/appApi.js';
 import { toggleLike } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 import UpdatePostModal from '../Modals/UpdatePostModal.jsx';
+import ReactionCountModal from '../Modals/ReactionCountModal.jsx';
 
 
 
@@ -20,15 +21,21 @@ import UpdatePostModal from '../Modals/UpdatePostModal.jsx';
 const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPostsFunction, getAllPostsFunction }) => {
     const { userDetails } = useGlobalAppContext();
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [isReactionCountModalOpen, setIsReactionCountModalOpen] = useState(false);
     const [currentPostId, setCurrentPostId] = useState(null); //state to store the post id of post which need to be updated
 
-    const [likedBy, setLikedBy] = useState(() => {
+    const [isLikedBy, setIsLikedBy] = useState(() => {
         return post?.likedby.some((likeObj) => likeObj._id === userDetails._id)
     })
 
-    const [dislikedBy, setDislikedBy] = useState(() => {
+    const [isDislikedBy, setIsDislikedBy] = useState(() => {
         return post?.dislikedby.some((dislikeObj) => dislikeObj._id === userDetails._id)
     })
+
+    // like details
+
+    const [likedDetails, setLikedDetails] = useState([...post?.likedby])
+    const [dislikedDetails, setDislikedDetails] = useState([...post?.dislikedby])
 
 
     const openUpdateModal = (postId) => {
@@ -62,12 +69,13 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPosts
         try {
             const response = await toggleLike(id);
             if (response?.status === 200) {
-                console.log("liked", id)
-                if (dislikedBy) {
-                    setDislikedBy(false)
+                if (isDislikedBy) {
+                    setIsDislikedBy(false)
                 }
 
-                setLikedBy(!likedBy);
+                setIsLikedBy(!isLikedBy);
+                setLikedDetails([...(response?.data?.data?.likedby || [])]);
+                setDislikedDetails([...(response?.data?.data?.dislikedby || [])]);
             }
         } catch (error) {
             console.error(error);
@@ -79,11 +87,14 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPosts
         try {
             const response = await toggleDislike(id);
             if (response?.status === 200) {
-                if (likedBy) {
-                    setLikedBy(false)
+
+                if (isLikedBy) {
+                    setIsLikedBy(false)
                 }
 
-                setDislikedBy(!dislikedBy);
+                setIsDislikedBy(!isDislikedBy);
+                setLikedDetails([...(response?.data?.data?.likedby || [])]);
+                setDislikedDetails([...(response?.data?.data?.dislikedby || [])]);
             }
         } catch (error) {
             console.error(error);
@@ -136,14 +147,28 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPosts
                 <Carousel slides={post.postimgs} />
             </div>}
 
+            {(likedDetails.length > 0 || dislikedDetails.length > 0) && <div onClick={() => setIsReactionCountModalOpen(!isReactionCountModalOpen)} className='relative mt-2 flex justify-end items-center text-sm'>
+                <div className='flex items-center gap-1 border-b-2 border-transparent hover:border-b-2 pb-1 w-fit transition-all duration-150 cursor-pointer'
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = post.theme)}
+                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = "transparent")}
+                >
+                    <p className='flex items-center gap-1'><BsHeartFill size={16} style={{ color: post.theme }} /> {likedDetails.length} likes,</p>
+                    <p className='flex items-center gap-1'><BsHeartbreakFill size={16} style={{ color: post.theme }} /> {dislikedDetails.length} dislikes</p>
+                </div>
+
+                {isReactionCountModalOpen && <div className='absolute top-full right-0 mt-2 w-1/2 max-w-1/2 z-10'>
+                    <ReactionCountModal setIsReactionCountModalOpen={setIsReactionCountModalOpen} theme={post.theme} likedDetails={likedDetails} dislikedDetails={dislikedDetails} />
+                </div>}
+            </div>}
+
             {userDetails._id !== post.user._id && <div className='border-y-[1px] border-gray-500 mt-2 flex items-center justify-between gap-1 py-1'>
                 <button onClick={() => toggleLikeFunction(post._id)} className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
-                    {likedBy ? <BsHeartFill size={20} style={{ color: post.theme }} /> : <BsHeart size={20} style={{ color: post.theme }} />}
+                    {isLikedBy ? <BsHeartFill size={20} style={{ color: post.theme }} /> : <BsHeart size={20} style={{ color: post.theme }} />}
                     <p>Like</p>
                 </button>
                 <button onClick={() => toggleDislikeFunction(post._id)} className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
-                    {dislikedBy ? <BsHeartbreakFill size={20} style={{ color: post.theme }} /> : <BsHeartbreak size={20} style={{ color: post.theme }} />}
-                    <p>Dislike</p>
+                    {isDislikedBy ? <BsHeartbreakFill size={20} style={{ color: post.theme }} /> : <BsHeartbreak size={20} style={{ color: post.theme }} />}
+                    <p>DisLike</p>
                 </button>
             </div>}
 

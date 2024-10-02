@@ -288,6 +288,7 @@ const toggleLike = asyncHandler(async (req, res) => {
     return res.status(200).json(new apiResponse(200, populatedPost, "Successfully liked the post"))
 
 })
+
 const toggleDislike = asyncHandler(async (req, res) => {
     const postId = req?.params?.postId;
     const userId = req?.user?._id;
@@ -317,7 +318,6 @@ const toggleDislike = asyncHandler(async (req, res) => {
     const updatedPost = await post.save({
         validateBeforeSave: false,
         timestamps: false, //donot modify updatedAt field for this operation
-        new: true
     });
 
     

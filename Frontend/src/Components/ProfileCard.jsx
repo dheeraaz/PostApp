@@ -25,7 +25,7 @@ const ProfileCard = ({ setIsProfileModalOpen, setIsCoverModalOpen, postCount, pr
             </div>
 
             <div className='ml-32 mt-2 font-_poppins'>
-                <p className='text-xl font-semibold'>{userDetails.username}</p>
+                <p className='text-xl font-semibold'>{userInfo?.username ||userDetails.username}</p>
                 <p className='text-base font-light text-gray-400'>{postCount} Posts</p>
             </div>
 
