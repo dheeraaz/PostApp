@@ -247,6 +247,91 @@ const updatePost = asyncHandler(async (req, res) => {
     res.status(200).json(new apiResponse(200, updatedPost, "Successfully updated the post"))
 })
 
+const toggleLike = asyncHandler(async (req, res) => {
+    const postId = req?.params?.postId;
+    const userId = req?.user?._id;
+
+    if (!postId) throw new apiError(400, "PostId not provided");
+
+    const post = await Post.findById(postId);
+
+    if (!post) throw new apiError(404, "Post not found");
+
+    // checking and removing user from disliked array
+    const dislikedIndex = post?.dislikedby?.indexOf(userId);
+    if (dislikedIndex > -1) {
+        post?.dislikedby.splice(dislikedIndex, 1);
+    }
+
+    // checking and toggling user from liked array
+    const likedIndex = post?.likedby?.indexOf(userId);
+
+    if (likedIndex > -1) {
+        // removing user from like array, if he has already liked post
+        post?.likedby.splice(likedIndex, 1);
+    } else {
+        post?.likedby.push(userId); //adding user in liked array if he hasn't liked the post yet
+    }
+
+    // update the post 
+    const updatedPost = await post.save({
+        validateBeforeSave: false,
+        timestamps: false, //donot modify updatedAt field for this operation
+    });
+
+    // Populate after the post has been saved
+    const populatedPost = await Post.findById(updatedPost._id)
+    .populate('user', '_id username profilepic')
+    .populate('likedby', '_id username profilepic')
+    .populate('dislikedby', '_id username profilepic');
+
+    return res.status(200).json(new apiResponse(200, populatedPost, "Successfully liked the post"))
+
+})
+const toggleDislike = asyncHandler(async (req, res) => {
+    const postId = req?.params?.postId;
+    const userId = req?.user?._id;
+
+    if (!postId) throw new apiError(400, "PostId not provided");
+
+    const post = await Post.findById(postId);
+
+    if (!post) throw new apiError(404, "Post not found");
+
+    // checking and removing user from liked array
+    const likedIndex = post?.likedby?.indexOf(userId);
+    if (likedIndex > -1) {
+        post?.likedby.splice(likedIndex, 1);
+    }
+
+    // checking and toggling user from disliked array
+    const dislikedIndex = post?.dislikedby?.indexOf(userId);
+    if (dislikedIndex > -1) {
+        // removing user from dislike array, if he has already disliked post
+        post?.dislikedby.splice(dislikedIndex, 1);
+    } else {
+        post?.dislikedby.push(userId); //adding user in disliked array if he hasn't disliked the post yet
+    }
+
+    // update the post 
+    const updatedPost = await post.save({
+        validateBeforeSave: false,
+        timestamps: false, //donot modify updatedAt field for this operation
+        new: true
+    });
+
+    
+    // Populate after the post has been saved
+    const populatedPost = await Post.findById(updatedPost._id)
+    .populate('user', '_id username profilepic')
+    .populate('likedby', '_id username profilepic')
+    .populate('dislikedby', '_id username profilepic');
+        
+
+    return res.status(200).json(new apiResponse(200, populatedPost, "Successfully liked the post"))
+
+})
+
 export {
     createPost,
     getAllPosts,
@@ -254,4 +339,6 @@ export {
     deletePost,
     getSinglePost,
     updatePost,
+    toggleLike,
+    toggleDislike,
 }

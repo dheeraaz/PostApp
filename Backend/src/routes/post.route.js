@@ -11,6 +11,8 @@ import {
     deletePost,
     getSinglePost,
     updatePost,
+    toggleLike,
+    toggleDislike
 
 } from '../controllers/post.controller.js';
 
@@ -23,6 +25,8 @@ router.route('/deletepost/:postId').delete(verifyJWT, deletePost);
 router.route('/getsinglepost/:postId').get(verifyJWT, getSinglePost);
 
 router.route('/updatepost/:postId').patch(verifyJWT, multerUpload.array('newimgfiles', maximumImagecount), multerUploadErrorHandler, updatePost);
+router.route('/togglelike/:postId').patch(verifyJWT, toggleLike);
+router.route('/toggledislike/:postId').patch(verifyJWT, toggleDislike);
 
 
 export default router

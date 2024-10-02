@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [allPosts, setAllPosts] = useState([]);
-  
+
 
   const getAllPostsFunction = async () => {
     try {
@@ -32,6 +32,7 @@ const Home = () => {
     getAllPostsFunction();
   }, [])
 
+
   useEffect(() => {
     if (isModalOpen) {
       document.body.style.overflow = 'hidden'; // Disable scroll
@@ -49,10 +50,10 @@ const Home = () => {
     <>
       <CreatePostButton setIsModalOpen={setIsModalOpen} />
       {isModalOpen && <CreatePostModal setIsModalOpen={setIsModalOpen} getAllPostsFunction={getAllPostsFunction} />}
-      
+
       {/* posts */}
-      {allPosts?.length > 0 ? (allPosts.map((post, index) => {
-        return <PostCard key={index} post={post} deletePostFromHome={deletePostFromHome} getAllPostsFunction={getAllPostsFunction}/>
+      {allPosts?.length > 0 ? (allPosts.map((post) => {
+        return <PostCard key={post._id} post={post} deletePostFromHome={deletePostFromHome} getAllPostsFunction={getAllPostsFunction} />
       })) : (
         <div className='text-center'>
           <p className='text-gray-500'>No Posts Available</p>

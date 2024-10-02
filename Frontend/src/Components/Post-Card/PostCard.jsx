@@ -9,20 +9,26 @@ import parse from 'html-react-parser';
 import './PostCard.css'
 import { useGlobalAppContext } from '../../Context/AppContext.jsx';
 import { deletePost } from '../../Apis/appApi.js';
+import { toggleDislike } from '../../Apis/appApi.js';
+import { toggleLike } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
 import UpdatePostModal from '../Modals/UpdatePostModal.jsx';
 
 
-{/* <BsHeart /> */ }
-{/* <BsHeartFill /> */ }
-{/* <BsHeartbreak /> */ }
-{/* <BsHeartbreakFill /> */ }
 
 
-const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPostsFunction, getAllPostsFunction}) => {
+const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPostsFunction, getAllPostsFunction }) => {
     const { userDetails } = useGlobalAppContext();
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [currentPostId, setCurrentPostId] = useState(null); //state to store the post id of post which need to be updated
+
+    const [likedBy, setLikedBy] = useState(() => {
+        return post?.likedby.some((likeObj) => likeObj._id === userDetails._id)
+    })
+
+    const [dislikedBy, setDislikedBy] = useState(() => {
+        return post?.dislikedby.some((dislikeObj) => dislikeObj._id === userDetails._id)
+    })
 
 
     const openUpdateModal = (postId) => {
@@ -52,7 +58,38 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPosts
         }
     }
 
+    const toggleLikeFunction = async (id) => {
+        try {
+            const response = await toggleLike(id);
+            if (response?.status === 200) {
+                console.log("liked", id)
+                if (dislikedBy) {
+                    setDislikedBy(false)
+                }
 
+                setLikedBy(!likedBy);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
+        }
+    }
+
+    const toggleDislikeFunction = async (id) => {
+        try {
+            const response = await toggleDislike(id);
+            if (response?.status === 200) {
+                if (likedBy) {
+                    setLikedBy(false)
+                }
+
+                setDislikedBy(!dislikedBy);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error?.response?.data?.message || error?.message || "Internal Server Error")
+        }
+    }
 
     return (
         post && (<div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-4 mb-2'>
@@ -100,12 +137,12 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPosts
             </div>}
 
             {userDetails._id !== post.user._id && <div className='border-y-[1px] border-gray-500 mt-2 flex items-center justify-between gap-1 py-1'>
-                <button className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
-                    <BsHeart size={20} style={{ color: post.theme }} />
+                <button onClick={() => toggleLikeFunction(post._id)} className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
+                    {likedBy ? <BsHeartFill size={20} style={{ color: post.theme }} /> : <BsHeart size={20} style={{ color: post.theme }} />}
                     <p>Like</p>
                 </button>
-                <button className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
-                    <BsHeartbreak size={20} style={{ color: post.theme }} />
+                <button onClick={() => toggleDislikeFunction(post._id)} className='w-full flex justify-center items-center gap-2 py-2 rounded-md hover:bg-gray-600'>
+                    {dislikedBy ? <BsHeartbreakFill size={20} style={{ color: post.theme }} /> : <BsHeartbreak size={20} style={{ color: post.theme }} />}
                     <p>Dislike</p>
                 </button>
             </div>}

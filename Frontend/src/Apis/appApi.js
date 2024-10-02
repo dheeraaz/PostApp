@@ -91,10 +91,19 @@ export const getSinglePost = async (postId) => {
     return appApi.get(`/v1/posts/getsinglepost/${postId}`)
 }
 
-export const updatePost = async ({frontendData, postId})=>{
+export const updatePost = async ({ frontendData, postId }) => {
     return appApi.patch(`v1/posts/updatepost/${postId}`, frontendData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
-    }) 
+    })
+}
+
+export const toggleLike = async (postId) => {
+    return appApi.patch(`/v1/posts/togglelike/${postId}`)
+}
+
+export const toggleDislike = async (postId) => {
+    return appApi.patch(`/v1/posts/toggledislike/${postId}`)
+
 }
