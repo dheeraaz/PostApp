@@ -16,6 +16,10 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
   const [postError, setPostError] = useState();
   const [isUploading, setIsUploading] = useState(false);
 
+  // these two states are used for validating and checking if any changes were made in new post or not
+  const [singlePost, setSinglePost] = useState({});
+  const [previosImages, setPreviousImages] = useState([])
+
   // handling theme change
   const handleThemeChange = (e) => {
     setTheme(e.target.value);
@@ -25,6 +29,12 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
   // Handle saving the post content
   const handleCreate = async () => {
     setPostError("");
+
+
+    if ((singlePost.theme === theme) && (singlePost.content === editorContent) && (JSON.stringify(previosImages) === JSON.stringify(postImages))) {
+      toast.error("No changes were made");
+      return
+    }
 
     if ((editorContent === "<p></p>" || editorContent === "") && !postImages.length > 0) {
       setPostError("Both post content and images cannot be empty");
@@ -37,11 +47,11 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
     postImages.forEach((image) => {
       // formData.append("postimgs", image);
 
-      if(typeof image === 'string' && image.includes("cloudinary")){
+      if (typeof image === 'string' && image.includes("cloudinary")) {
         formData.append("previousimgs", image)
       }
 
-      if(typeof image !== 'string'){
+      if (typeof image !== 'string') {
         formData.append('newimgfiles', image)
       }
     });
@@ -77,13 +87,15 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
   const getSinglePostFunction = async (id) => {
     try {
       const response = await getSinglePost(id);
-      if(response?.status===200){
+      if (response?.status === 200) {
+        setSinglePost(response?.data?.data)
         setEditorContent(response?.data?.data?.content);
         setTheme(response?.data?.data?.theme);
 
-        if(response?.data?.data?.postimgs.length >0){
-          const images = response?.data?.data?.postimgs?.map((img)=>{return img.secure_url})
+        if (response?.data?.data?.postimgs.length > 0) {
+          const images = response?.data?.data?.postimgs?.map((img) => { return img.secure_url })
           setPostImages(images);
+          setPreviousImages(images)
         }
       }
     } catch (error) {
@@ -99,8 +111,8 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
 
 
   return (
-    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-screen h-screen backdrop-blur-[1px] flex items-center justify-center z-20 overflow-y-auto'>
-      <div className='w-[1000px] max-w-[90%]  mx-auto bg-_primary rounded-md relative max-h-[70vh] overflow-y-auto _scrollbar-CSS'>
+    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-screen min-h-screen flex items-center justify-center z-20 overflow-y-auto backdrop-blur-[1px]'>
+      <div className='w-[1000px] max-w-[90%] mx-auto bg-_primary rounded-md  max-h-[70vh] overflow-y-auto _scrollbar-CSS z-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
         <button onClick={() => setIsUpdateModalOpen(false)} className='absolute top-3 right-3 rounded-full p-1 hover:bg-gray-600'><RxCross2 size={24} /></button>
 
         {/* Text Editor */}
@@ -116,7 +128,7 @@ const UpdatePostModal = ({ setIsUpdateModalOpen, currentPostId, getAllPostsFunct
         </div>
 
         {/* Theme Selection Option */}
-        <ThemeSelector handleThemeChange={handleThemeChange} theme={theme}/>
+        <ThemeSelector handleThemeChange={handleThemeChange} theme={theme} />
 
         {postError && <div className='mb-2 px-4'>
           <p className=' text-center text-sm text-red-600 font-_poppins'>{postError}</p>
