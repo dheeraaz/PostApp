@@ -48,14 +48,22 @@ router.route("/refreshtokens").post(refreshTokens);
 
 router
   .route("/updateprofilepic")
-  .patch(verifyJWT, multerUpload.single("profilepic"),multerUploadErrorHandler, updateProfilePic);
+  .patch(
+    verifyJWT,
+    multerUpload.single("profilepic"),
+    multerUploadErrorHandler,
+    updateProfilePic
+  );
 
 router
   .route("/updatecoverpic")
-  .patch(verifyJWT, multerUpload.single("coverpic"), multerUploadErrorHandler,updateCoverPic);
+  .patch(
+    verifyJWT,
+    multerUpload.single("coverpic"),
+    multerUploadErrorHandler,
+    updateCoverPic
+  );
 
-router
-  .route("/getuserinfo/:userId")
-  .get(verifyJWT, getUserInfo);
+router.route("/getuserinfo/:userId").get(verifyJWT, getUserInfo);
 
 export default router;

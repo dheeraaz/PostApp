@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useGlobalAppContext } from '../../Context/AppContext';
-import CreatePostModal from '../../Components/Modals/CreatePostModal.jsx';
-import CreatePostButton from '../../Components/CreatePostButton.jsx';
 import ProfileCard from '../../Components/ProfileCard.jsx';
-import ProfileImageModal from '../../Components/Modals/ProfileImageModal.jsx';
-import CoverImageModal from '../../Components/Modals/CoverImageModal.jsx'
 
 import { getUserInfo, getUserPosts } from '../../Apis/appApi.js';
 import PostCard from '../../Components/Post-Card/PostCard.jsx';

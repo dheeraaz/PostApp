@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "node:fs";
 import logger from "./logger.js";
-import pLimit from 'p-limit';
+import pLimit from "p-limit";
 import { maximumImagecount } from "../constants/constants.js";
 
 cloudinary.config({
@@ -9,7 +9,6 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
 
 // function to upload only image
 const uploadOnCloudinary = async (localFilePath) => {
@@ -64,8 +63,7 @@ const deleteFromCloudinary = async (imageUrl) => {
   }
 };
 
-
-const limit = pLimit(maximumImagecount)
+const limit = pLimit(maximumImagecount);
 // function to upload multiple images
 const uploadMultipleOnCloudinary = (fileArrayLocalPath) => {
   return fileArrayLocalPath.map((image) => {
@@ -77,15 +75,22 @@ const uploadMultipleOnCloudinary = (fileArrayLocalPath) => {
 };
 
 // deleting multiple images from cloudinary
-const deleteMultipleFromClodinary = async (ArrayOfPublicIdOfImages)=>{
-    try {
-      const result = await cloudinary.api.delete_resources(ArrayOfPublicIdOfImages);
-      
-      return result;
-    } catch (error) {
-      logger.error("Error in deleting image from Cloudinary", error);
-      return null;
-    }
-}
+const deleteMultipleFromClodinary = async (ArrayOfPublicIdOfImages) => {
+  try {
+    const result = await cloudinary.api.delete_resources(
+      ArrayOfPublicIdOfImages
+    );
 
-export { uploadOnCloudinary, deleteFromCloudinary, uploadMultipleOnCloudinary, deleteMultipleFromClodinary };
+    return result;
+  } catch (error) {
+    logger.error("Error in deleting image from Cloudinary", error);
+    return null;
+  }
+};
+
+export {
+  uploadOnCloudinary,
+  deleteFromCloudinary,
+  uploadMultipleOnCloudinary,
+  deleteMultipleFromClodinary,
+};

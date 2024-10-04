@@ -12,14 +12,14 @@ const postSchema = new mongoose.Schema(
     },
     postimgs: [
       {
-        public_id:{
-          type:String,
-          required:true
+        public_id: {
+          type: String,
+          required: true,
         },
-        secure_url:{
-          type:String,
-          required:true
-        }
+        secure_url: {
+          type: String,
+          required: true,
+        },
       },
     ],
     theme: {

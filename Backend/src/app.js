@@ -8,7 +8,7 @@ import morgan from "morgan";
 // Routes Import
 import homeRouter from "./routes/home.route.js";
 import userRouter from "./routes/user.route.js";
-import postRouter from './routes/post.route.js';
+import postRouter from "./routes/post.route.js";
 
 const app = express();
 

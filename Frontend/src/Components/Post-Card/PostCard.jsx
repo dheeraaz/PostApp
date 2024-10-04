@@ -103,7 +103,7 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPosts
     }
 
     return (
-        post && (<div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-4 mb-2'>
+        post && (<div className='max-w-[90%] w-[600px] mx-auto bg-_primary rounded-md shadow-md px-4 py-4 mb-3'>
             <div className='flex justify-between relative'>
                 <div className='flex gap-2 items-center'>
                     <Link
@@ -134,9 +134,11 @@ const PostCard = ({ post, deletePostFromHome, deletePostFromProfile, getOwnPosts
 
             </div>
 
-            <div className='mt-1 _post-Content'>
+            <div className='mt-1 ' id='_content_outer-div'>
                 {/* <p>{post.content}</p> */}
-                {parse(post.content)}
+                <div className='_post-Content' id='_content_inner_div'>
+                    {parse(post.content)}
+                </div>
             </div>
             {/* <hr className='mt-4 border-gray-500 h-[1px]' /> */}
 

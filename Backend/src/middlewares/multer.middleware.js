@@ -2,8 +2,7 @@ import multer from "multer";
 
 import crypto from "crypto";
 import path from "path";
-import fs from 'fs'
-
+import fs from "fs";
 
 // __dirname is not defined in ES Module Scope, so this small tweak is needed to replicate the __dirname functionality as of commonjs
 import { fileURLToPath } from "url";
@@ -17,7 +16,7 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // if directory is not already present, simply create one
     if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true })
+      fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     // if directory is present, then upload the file
@@ -32,21 +31,20 @@ const storage = multer.diskStorage({
   },
 });
 
-
 // applying file filter
 const fileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase(); //returns .jpg / .jpeg
   const allowedFileType = [".jpg", ".png", ".jpeg", ".gif"];
 
   if (allowedFileType.includes(ext)) {
-    cb(null, true)
-  }else{
-    cb(new Error('Only images are allowed'))
+    cb(null, true);
+  } else {
+    cb(new Error("Only images are allowed"));
   }
-}
+};
 
 export const multerUpload = multer({
   storage: storage,
   limits: { fileSize: 2 * 1024 * 1024 }, //maximum size of individual image 2 MB
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
 });

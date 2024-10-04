@@ -1,32 +1,44 @@
-import Router from 'express'
+import Router from "express";
 
-import { verifyJWT } from '../middlewares/auth.middleware.js';
-import { multerUpload } from '../middlewares/multer.middleware.js';
-import { multerUploadErrorHandler } from '../middlewares/multer_upload_error.middleware.js'
-import { maximumImagecount } from '../constants/constants.js';
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { multerUpload } from "../middlewares/multer.middleware.js";
+import { multerUploadErrorHandler } from "../middlewares/multer_upload_error.middleware.js";
+import { maximumImagecount } from "../constants/constants.js";
 import {
-    createPost,
-    getAllPosts,
-    getUserPosts,
-    deletePost,
-    getSinglePost,
-    updatePost,
-    toggleLike,
-    toggleDislike
-
-} from '../controllers/post.controller.js';
+  createPost,
+  getAllPosts,
+  getUserPosts,
+  deletePost,
+  getSinglePost,
+  updatePost,
+  toggleLike,
+  toggleDislike,
+} from "../controllers/post.controller.js";
 
 const router = Router();
 
-router.route('/createpost').post(verifyJWT, multerUpload.array('postimgs', maximumImagecount), multerUploadErrorHandler, createPost);
-router.route('/getallposts').get(verifyJWT, getAllPosts);
-router.route('/getuserposts/:userId').get(verifyJWT, getUserPosts);
-router.route('/deletepost/:postId').delete(verifyJWT, deletePost);
-router.route('/getsinglepost/:postId').get(verifyJWT, getSinglePost);
+router
+  .route("/createpost")
+  .post(
+    verifyJWT,
+    multerUpload.array("postimgs", maximumImagecount),
+    multerUploadErrorHandler,
+    createPost
+  );
+router.route("/getallposts").get(verifyJWT, getAllPosts);
+router.route("/getuserposts/:userId").get(verifyJWT, getUserPosts);
+router.route("/deletepost/:postId").delete(verifyJWT, deletePost);
+router.route("/getsinglepost/:postId").get(verifyJWT, getSinglePost);
 
-router.route('/updatepost/:postId').patch(verifyJWT, multerUpload.array('newimgfiles', maximumImagecount), multerUploadErrorHandler, updatePost);
-router.route('/togglelike/:postId').patch(verifyJWT, toggleLike);
-router.route('/toggledislike/:postId').patch(verifyJWT, toggleDislike);
+router
+  .route("/updatepost/:postId")
+  .patch(
+    verifyJWT,
+    multerUpload.array("newimgfiles", maximumImagecount),
+    multerUploadErrorHandler,
+    updatePost
+  );
+router.route("/togglelike/:postId").patch(verifyJWT, toggleLike);
+router.route("/toggledislike/:postId").patch(verifyJWT, toggleDislike);
 
-
-export default router
+export default router;

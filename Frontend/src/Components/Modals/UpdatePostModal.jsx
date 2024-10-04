@@ -3,7 +3,6 @@ import { RxCross2 } from "react-icons/rx";
 import Tiptap from '../Text-Editor/TipTap';
 import MultipleImgUpload from '../MultipleImgUpload/MultipleImgUpload';
 import ThemeSelector from '../ThemeSelector.jsx';
-import parse from 'html-react-parser';
 
 import { getSinglePost, updatePost } from '../../Apis/appApi.js';
 import { toast } from 'react-toastify';
