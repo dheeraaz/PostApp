@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
-import Tiptap from '../Text-Editor/TipTap';
+import Tiptap from '../Text-Editor/Tiptap.jsx';
 import MultipleImgUpload from '../MultipleImgUpload/MultipleImgUpload';
 import ThemeSelector from '../ThemeSelector.jsx';
 
