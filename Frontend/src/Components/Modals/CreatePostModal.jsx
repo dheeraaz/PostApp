@@ -162,14 +162,14 @@ const CreatePostModal = ({ setIsModalOpen, getAllPostsFunction, getOwnPostsFunct
           </div>
         </div> */}
 
-        <ThemeSelector handleThemeChange={handleThemeChange}/>
+        <ThemeSelector handleThemeChange={handleThemeChange} theme={theme}/>
 
         {postError && <div className='mb-2 px-4'>
           <p className=' text-center text-sm text-red-600 font-_poppins'>{postError}</p>
         </div>}
 
         <div className='px-4 mb-8 flex items-center justify-end'>
-          <button onClick={handleCreate} disabled={isUploading} className={`px-4 py-1 rounded-md ${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500"} `}>Create Post</button>
+          <button onClick={handleCreate} disabled={isUploading} className={`px-4 py-1 rounded-md ${isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-500"} `}>{isUploading ? "Creating Post":"Create Post"}</button>
         </div>
       </div>
 
