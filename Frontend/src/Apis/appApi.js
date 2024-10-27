@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const appApi = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    // baseURL: 'http://localhost:3000/api',
+    baseURL: 'https://postapp-backend-7g5a.onrender.com/api',
     headers: { 'Content-Type': 'application/json' },
     withCredentials: true, //To include cookies in requests
     timeout: 10000, //timeout 10s
