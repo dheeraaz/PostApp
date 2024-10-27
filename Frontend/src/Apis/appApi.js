@@ -5,7 +5,7 @@ const appApi = axios.create({
     baseURL: 'https://postapp-backend-7g5a.onrender.com/api',
     headers: { 'Content-Type': 'application/json' },
     withCredentials: true, //To include cookies in requests
-    timeout: 10000, //timeout 10s
+    timeout: 20000, //timeout 20s
 })
 
 appApi.interceptors.response.use(function (response) {
